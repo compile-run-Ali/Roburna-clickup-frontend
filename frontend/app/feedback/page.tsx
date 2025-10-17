@@ -1,71 +1,25 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { fetchFeedback } from "../api/mock";
 
 export default function FeedbackQueuePage() {
   const [activeTab, setActiveTab] = useState('Pending');
-  const [feedbackItems] = useState([
-    {
-      id: 1,
-      title: 'Dark mode implementation request for better UX',
-      description: 'Our team would like to have a dark mode option for better user experience during night hours. This has been requested by',
-      status: 'Pending',
-      priority: 'High',
-      category: 'Corporate Dashboard',
-      date: 'Oct 04',
-      timeAgo: '2 Hrs',
-      assignee: 'Lars, BigRex',
-      resolved: false
-    },
-    {
-      id: 2,
-      title: 'Critical Server Error',
-      description: 'Users are unable to complete purchases due to a payment gateway error that started appearing this morning. Multiple customers have reported failed transactions and money being debited without order',
-      status: 'Escalated',
-      priority: 'High',
-      category: 'Corporate Dashboard',
-      date: 'Oct 04',
-      timeAgo: '1 Hrs',
-      assignee: 'Lars, BigRex',
-      resolved: false
-    },
-    {
-      id: 3,
-      title: 'Dark mode implementation request for better UX',
-      description: 'Our team would like to have a dark mode option for better user experience during night hours. This has been requested by',
-      status: 'Resolved',
-      priority: 'High',
-      category: 'Corporate Dashboard',
-      date: 'Oct 04',
-      timeAgo: '2 Hrs',
-      assignee: 'Lars, BigRex',
-      resolved: true
-    },
-    {
-      id: 4,
-      title: 'Critical payment gateway failure affecting all transactions',
-      description: 'Users are unable to complete purchases due to a payment gateway error that started appearing this morning. Multiple customers have reported failed transactions and money being debited without order',
-      status: 'Escalated',
-      priority: 'High',
-      category: 'E-commerce Platform',
-      date: 'Oct 04',
-      timeAgo: '2 Hrs',
-      assignee: 'Lars, BigRex',
-      resolved: false
-    },
-    {
-      id: 5,
-      title: 'UI performance optimization',
-      description: 'The dashboard is experiencing slow load times on mobile devices, particularly during peak usage hours. Need to optimize rendering performance.',
-      status: 'In Progress',
-      priority: 'Medium',
-      category: 'Mobile App',
-      date: 'Oct 05',
-      timeAgo: '3 Hrs',
-      assignee: 'Alex, Sam',
-      resolved: false
-    }
-  ]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [feedbackItems, setFeedbackItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+    fetchFeedback()
+      .then((items) => { if (isMounted) setFeedbackItems(items as any[]); })
+      .catch(() => { if (isMounted) setError('Failed to load feedback'); })
+      .finally(() => { if (isMounted) setLoading(false); });
+    return () => { isMounted = false; };
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -101,7 +55,9 @@ export default function FeedbackQueuePage() {
     }
   };
 
-  const filteredFeedback = feedbackItems.filter(item => item.status === activeTab);
+  const filteredFeedback = useMemo(() => feedbackItems
+    .filter(item => item.status === activeTab)
+    .filter(item => JSON.stringify(item).toLowerCase().includes(searchQuery.toLowerCase())), [feedbackItems, activeTab, searchQuery]);
 
   return (
     <div className="p-6">
@@ -144,6 +100,8 @@ export default function FeedbackQueuePage() {
             type="text"
             placeholder="Search feedback, clients, or projects..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <svg className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -151,6 +109,12 @@ export default function FeedbackQueuePage() {
         </div>
       </div>
 
+      {loading && (
+        <div className="text-gray-600">Loading feedback...</div>
+      )}
+      {error && !loading && (
+        <div className="text-red-600">{error}</div>
+      )}
       <div className="space-y-4">
         {filteredFeedback.map((item) => (
           <div
