@@ -1,86 +1,27 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { fetchArchive } from "../api/mock";
 
 export default function ArchivePage() {
   const [activeTab, setActiveTab] = useState('projects');
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [archivedData, setArchivedData] = useState<{ projects: any[]; tasks: any[]; feedback: any[] }>({ projects: [], tasks: [], feedback: [] });
 
-  // Sample archived data
-  const archivedData = {
-    projects: [
-      {
-        id: 1,
-        name: "Legacy Website Redesign",
-        description: "Complete overhaul of the company's legacy website from 2015",
-        dateArchived: "2025-09-15",
-        teamSize: 5,
-        duration: "6 months"
-      },
-      {
-        id: 2,
-        name: "Mobile App v1.0",
-        description: "First version of the company mobile application for iOS and Android",
-        dateArchived: "2025-08-22",
-        teamSize: 8,
-        duration: "8 months"
-      },
-      {
-        id: 3,
-        name: "Database Migration 2024",
-        description: "Migration of legacy database to cloud infrastructure",
-        dateArchived: "2025-07-30",
-        teamSize: 4,
-        duration: "4 months"
-      }
-    ],
-    tasks: [
-      {
-        id: 101,
-        title: "Update documentation for API v1",
-        project: "Legacy Website Redesign",
-        assignedTo: "Alex Johnson",
-        dateArchived: "2025-09-10",
-        priority: "Medium"
-      },
-      {
-        id: 102,
-        title: "Remove deprecated endpoints",
-        project: "API Modernization",
-        assignedTo: "Sam Wilson",
-        dateArchived: "2025-08-15",
-        priority: "High"
-      },
-      {
-        id: 103,
-        title: "Archive old user accounts",
-        project: "User Management System",
-        assignedTo: "Taylor Reed",
-        dateArchived: "2025-07-20",
-        priority: "Low"
-      }
-    ],
-    feedback: [
-      {
-        id: 201,
-        title: "UI suggestions for dashboard",
-        category: "User Interface",
-        submittedBy: "Michael Chen",
-        dateArchived: "2025-09-05",
-        status: "Implemented"
-      },
-      {
-        id: 202,
-        title: "Performance improvement ideas",
-        category: "System Performance",
-        submittedBy: "Sarah Miller",
-        dateArchived: "2025-08-18",
-        status: "Reviewed"
-      }
-    ]
-  };
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+    fetchArchive()
+      .then((data) => { if (isMounted) setArchivedData(data as any); })
+      .catch((e) => { if (isMounted) setError('Failed to load archive'); })
+      .finally(() => { if (isMounted) setLoading(false); });
+    return () => { isMounted = false; };
+  }, []);
 
-  const currentData = archivedData[activeTab as keyof typeof archivedData];
+  const currentData = useMemo(() => archivedData[activeTab as keyof typeof archivedData] || [], [archivedData, activeTab]);
 
   return (
     <div className="p-6">
@@ -130,6 +71,12 @@ export default function ArchivePage() {
 
       {/* Archive Content */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        {loading && (
+          <div className="p-6 text-gray-600">Loading archive...</div>
+        )}
+        {error && !loading && (
+          <div className="p-6 text-red-600">{error}</div>
+        )}
         {activeTab === 'projects' && (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -143,7 +90,7 @@ export default function ArchivePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {archivedData.projects.map((project) => (
+                {archivedData.projects.filter(p => JSON.stringify(p).toLowerCase().includes(searchQuery.toLowerCase())).map((project) => (
                   <tr key={project.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">{project.name}</div>
@@ -180,7 +127,7 @@ export default function ArchivePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {archivedData.tasks.map((task) => (
+                {archivedData.tasks.filter(t => JSON.stringify(t).toLowerCase().includes(searchQuery.toLowerCase())).map((task) => (
                   <tr key={task.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">{task.title}</div>
@@ -223,7 +170,7 @@ export default function ArchivePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {archivedData.feedback.map((item) => (
+                {archivedData.feedback.filter(f => JSON.stringify(f).toLowerCase().includes(searchQuery.toLowerCase())).map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">{item.title}</div>

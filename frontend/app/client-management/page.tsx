@@ -1,54 +1,26 @@
 // ... existing code ...
 "use client"
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { fetchClients } from "../api/mock";
 
 const ClientManagementPage =()=> {
-  const [clients] = useState([
-    {
-      id: 1,
-      name: 'Sarah Johnson',
-      company: 'TechCorp Inc.',
-      status: 'Active',
-      projects: [
-        {
-          name: 'Ecommerce Platform',
-          count: 1
-        }
-      ],
-      tasks: {
-        total: 12,
-        escalations: 2
-      },
-      lastActivity: {
-        time: '2 hours ago',
-        description: 'Submitted urgent feedback'
-      },
-      health: 'Critical',
-      avatar: 'SJ'
-    },
-    {
-      id: 2,
-      name: 'Mike Chen',
-      company: 'StartupXYZ',
-      status: 'Active',
-      projects: [
-        {
-          name: 'Mobile App v2.0',
-          count: 2
-        }
-      ],
-      tasks: {
-        total: 2,
-        escalations: 0
-      },
-      lastActivity: {
-        time: '3 hours ago',
-        description: 'reviewed design mockups'
-      },
-      health: 'Good',
-      avatar: 'MJ'
-    }
-  ]);
+  const [clients, setClients] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+    fetchClients()
+      .then((data) => { if (isMounted) setClients(data as any[]); })
+      .catch(() => { if (isMounted) setError('Failed to load clients'); })
+      .finally(() => { if (isMounted) setLoading(false); });
+    return () => { isMounted = false; };
+  }, []);
+
+  const visibleClients = useMemo(() => clients.filter(c => JSON.stringify(c).toLowerCase().includes(searchQuery.toLowerCase())), [clients, searchQuery]);
 
   return (
     <div className="p-6">
@@ -76,6 +48,8 @@ const ClientManagementPage =()=> {
             type="text"
             placeholder="Search clients by name, company, or email..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <svg className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -110,7 +84,13 @@ const ClientManagementPage =()=> {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {clients.map((client) => (
+              {loading && (
+                <tr><td className="px-6 py-4" colSpan={6}><span className="text-gray-600">Loading clients...</span></td></tr>
+              )}
+              {error && !loading && (
+                <tr><td className="px-6 py-4" colSpan={6}><span className="text-red-600">{error}</span></td></tr>
+              )}
+              {visibleClients.map((client) => (
                 <tr key={client.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
