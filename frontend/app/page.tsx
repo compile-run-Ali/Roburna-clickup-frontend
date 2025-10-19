@@ -1,491 +1,258 @@
+'use client'
 import Link from 'next/link'
 
-const Home = () => {
+const LandingPage = () => {
   return (
-    <div className="w-full h-full bg-gray-50 p-6 overflow-y-auto">
-      {/* Top Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-black mb-1">Good Morning, Dave!</h1>
-          <p className="text-gray-500">It's Monday,22 September, 2025.</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-[#1E7145] rounded flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+            </svg>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add Task
-          </button>
-          <button className="bg-gray-200 hover:bg-gray-300 p-2.5 rounded-lg transition-colors">
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-          </button>
-          <button className="bg-gray-200 hover:bg-gray-300 px-4 py-2.5 rounded-lg flex items-center gap-2 transition-colors">
-            <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
-            <span className="text-gray-700 font-medium">Invite</span>
-          </button>
-          <button className="bg-gray-200 hover:bg-gray-300 p-2.5 rounded-lg transition-colors">
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </button>
+              <div>
+                <h1 className="text-2xl font-bold text-[#1E7145]">ROBURNA</h1>
+                <p className="text-sm text-gray-600">Labs</p>
+      </div>
         </div>
+
+            {/* Navigation Buttons */}
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/login"
+                className="text-gray-700 hover:text-[#1E7145] font-medium transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href="/sign-up"
+                className="bg-[#1E7145] hover:bg-[#388E3C] text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              >
+                Register
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-[#1E7145] to-[#388E3C] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              Streamline Your
+              <span className="block text-green-200">Project Management</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-green-100 mb-8 max-w-3xl mx-auto">
+              Powerful, intuitive project management platform designed to help teams collaborate, 
+              track progress, and deliver exceptional results.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/sign-up"
+                className="bg-white text-[#1E7145] hover:bg-gray-100 px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+              >
+                Get Started Free
+              </Link>
+              <Link
+                href="/login"
+                className="border-2 border-white text-white hover:bg-white hover:text-[#1E7145] px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+              >
+                Sign In
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Everything You Need to Manage Projects
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our comprehensive platform provides all the tools your team needs to plan, 
+              execute, and deliver projects successfully.
+            </p>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-4 gap-6 mb-8">
-        {/* Active Projects Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-gray-600 text-sm font-medium">Active Projects</h3>
-            <div className="bg-green-100 p-2 rounded-lg">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-              </svg>
-            </div>
-          </div>
-          <p className="text-3xl font-bold text-black mb-1">18</p>
-          <p className="text-sm text-gray-500">+2 from last month</p>
-        </div>
-
-        {/* Tasks Due Today Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-gray-600 text-sm font-medium">Tasks Due Today</h3>
-            <div className="bg-green-100 p-2 rounded-lg">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-          </div>
-          <p className="text-3xl font-bold text-black mb-1">0</p>
-          <p className="text-sm text-gray-500">5 Completed</p>
-        </div>
-
-        {/* Overdue Tasks Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-gray-600 text-sm font-medium">Overdue Tasks</h3>
-            <div className="bg-red-100 p-2 rounded-lg">
-              <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-          </div>
-          <p className="text-3xl font-bold text-red-600 mb-1">4</p>
-          <p className="text-sm text-gray-500">Requires attention</p>
-        </div>
-
-        {/* Team Members Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-gray-600 text-sm font-medium">Team Members</h3>
-            <div className="bg-green-100 p-2 rounded-lg">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-          </div>
-          <p className="text-3xl font-bold text-black mb-1">12</p>
-          <p className="text-sm text-gray-500">4 online</p>
-        </div>
-      </div>
-
-      {/* Active Projects Section */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="bg-green-600 text-white px-4 py-1.5 rounded-full text-sm font-medium">Active Projects</span>
-          <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">3</span>
-        </div>
-        <div className="grid grid-cols-2 gap-6">
-          {/* Project Card 1 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="text-lg font-bold text-black">Improve Security Measures</h3>
-              <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">Active</span>
-            </div>
-            <p className="text-gray-600 text-sm mb-4">Implement two-factor authentication and data encryption.</p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{width: '66%'}}></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#1E7145] rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
-              <span className="text-sm font-medium text-gray-700">66%</span>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Task Management</h3>
+              <p className="text-gray-600">
+                Create, assign, and track tasks with ease. Set priorities, due dates, and 
+                monitor progress in real-time.
+              </p>
             </div>
-            <div className="flex gap-2 mb-4">
-              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Planning
-              </span>
-              <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                </svg>
-                High
-              </span>
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Due Date: 13th Oct. 2025
-              </div>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+            {/* Feature 2 */}
+            <div className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#1E7145] rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                4 members
               </div>
-            </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Team Collaboration</h3>
+              <p className="text-gray-600">
+                Work together seamlessly with your team. Share files, communicate, and 
+                collaborate on projects in real-time.
+              </p>
           </div>
 
-          {/* Project Card 2 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="text-lg font-bold text-black">Website Redesign</h3>
-              <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">Active</span>
-            </div>
-            <p className="text-gray-600 text-sm mb-4">Redesign the company website with modern UI/UX principles.</p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{width: '45%'}}></div>
+            {/* Feature 3 */}
+            <div className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#1E7145] rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
               </div>
-              <span className="text-sm font-medium text-gray-700">45%</span>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Analytics & Reports</h3>
+              <p className="text-gray-600">
+                Get insights into your project performance with detailed analytics and 
+                customizable reports.
+              </p>
             </div>
-            <div className="flex gap-2 mb-4">
-              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Design
-              </span>
-              <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                </svg>
-                Medium
-              </span>
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+            {/* Feature 4 */}
+            <div className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#1E7145] rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                Due Date: 20th Nov. 2025
               </div>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                6 members
-              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Timeline Management</h3>
+              <p className="text-gray-600">
+                Plan and visualize project timelines with Gantt charts and milestone tracking.
+              </p>
             </div>
+
+            {/* Feature 5 */}
+            <div className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#1E7145] rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Feedback System</h3>
+              <p className="text-gray-600">
+                Collect and manage feedback from team members and stakeholders efficiently.
+              </p>
           </div>
 
-          {/* Project Card 3 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="text-lg font-bold text-black">Mobile App Development</h3>
-              <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">Active</span>
-            </div>
-            <p className="text-gray-600 text-sm mb-4">Develop a cross-platform mobile application for iOS and Android.</p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{width: '78%'}}></div>
+            {/* Feature 6 */}
+            <div className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#1E7145] rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
               </div>
-              <span className="text-sm font-medium text-gray-700">78%</span>
-            </div>
-            <div className="flex gap-2 mb-4">
-              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Development
-              </span>
-              <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                </svg>
-                High
-              </span>
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Due Date: 5th Dec. 2025
-              </div>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                8 members
-              </div>
-            </div>
-          </div>
-
-          {/* Project Card 4 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="text-lg font-bold text-black">Database Migration</h3>
-              <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">Active</span>
-            </div>
-            <p className="text-gray-600 text-sm mb-4">Migrate legacy database to cloud infrastructure.</p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{width: '30%'}}></div>
-              </div>
-              <span className="text-sm font-medium text-gray-700">30%</span>
-            </div>
-            <div className="flex gap-2 mb-4">
-              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Planning
-              </span>
-              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                </svg>
-                Normal
-              </span>
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Due Date: 15th Jan. 2026
-              </div>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                3 members
-              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Client Management</h3>
+              <p className="text-gray-600">
+                Manage client relationships and project communications in one centralized platform.
+              </p>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 bg-[#1E7145] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Trusted by Teams Worldwide</h2>
+            <p className="text-xl text-green-100">
+              Join thousands of teams who have transformed their project management
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-4xl font-bold text-green-200 mb-2">10,000+</div>
+              <div className="text-green-100">Active Projects</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-green-200 mb-2">50,000+</div>
+              <div className="text-green-100">Team Members</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-green-200 mb-2">99.9%</div>
+              <div className="text-green-100">Uptime</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-green-200 mb-2">24/7</div>
+              <div className="text-green-100">Support</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            Ready to Transform Your Project Management?
+          </h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Join thousands of teams who have already streamlined their workflow with our platform.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/sign-up"
+              className="bg-[#1E7145] hover:bg-[#388E3C] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+            >
+              Start Free Trial
+            </Link>
+            <Link
+              href="/login"
+              className="border-2 border-[#1E7145] text-[#1E7145] hover:bg-[#1E7145] hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+            >
+              Sign In
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-3 mb-4 md:mb-0">
+              <div className="w-8 h-8 bg-[#1E7145] rounded flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold">ROBURNA</h3>
+                <p className="text-sm text-gray-400">Labs</p>
+              </div>
+            </div>
+            <div className="text-center md:text-right">
+              <p className="text-gray-400 mb-2">
+                © 2025 Roburna Labs. All rights reserved.
+              </p>
+              <p className="text-sm text-gray-500">
+                Empowering teams to deliver exceptional projects.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
       </div>
-
-      {/* Due Task Section */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-medium">Due Task</span>
-          <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">4</span>
-        </div>
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-6 py-4 text-left">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                      </svg>
-                      <span className="text-sm font-semibold text-gray-700">Task Name</span>
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-left">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      <span className="text-sm font-semibold text-gray-700">Description</span>
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-left">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                      <span className="text-sm font-semibold text-gray-700">People</span>
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-left">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <span className="text-sm font-semibold text-gray-700">Timeline Date</span>
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-left">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                      </svg>
-                      <span className="text-sm font-semibold text-gray-700">Priority</span>
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500" />
-                      <span className="text-sm text-gray-900">Revise Content Strategy</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">Update existing content to align with new brand guidelines</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex -space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-green-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-yellow-500 border-2 border-white"></div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">01 Feb 2026 - 15 Feb 2026</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-medium">High</span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500" />
-                      <span className="text-sm text-gray-900">Design New Landing Page</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">Create modern and responsive landing page design</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex -space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-pink-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-indigo-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-teal-500 border-2 border-white"></div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">10 Feb 2026 - 25 Feb 2026</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium">Medium</span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500" />
-                      <span className="text-sm text-gray-900">Implement Payment Gateway</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">Integrate secure payment processing system</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex -space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-red-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-orange-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-white"></div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">15 Feb 2026 - 28 Feb 2026</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-medium">High</span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500" />
-                      <span className="text-sm text-gray-900">Update User Documentation</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">Revise and update user guides and API documentation</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex -space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-green-500 border-2 border-white"></div>
-                      <div className="w-8 h-8 rounded-full bg-yellow-500 border-2 border-white"></div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600">20 Feb 2026 - 05 Mar 2026</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">Normal</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Daily Standup Section */}
-      <div>
-        <div className="flex items-center gap-3 mb-4">
-          <span className="bg-gray-700 text-white px-4 py-1.5 rounded-full text-sm font-medium">Daily Standup</span>
-          <span className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm font-medium">3</span>
-        </div>
-        <div className="space-y-3">
-          <div className="bg-white rounded-xl p-5 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="bg-gray-100 p-2 rounded-lg">
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500 mb-1">Sep 23, 2025</p>
-                <h4 className="text-base font-bold text-black mb-1">Meeting with Rex</h4>
-                <p className="text-sm text-gray-600">12 UTC - 12:30 UTC</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-5 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="bg-gray-100 p-2 rounded-lg">
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500 mb-1">Sep 24, 2025</p>
-                <h4 className="text-base font-bold text-black mb-1">Team Standup</h4>
-                <p className="text-sm text-gray-600">14 UTC - 14:15 UTC</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-5 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="bg-gray-100 p-2 rounded-lg">
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500 mb-1">Sep 25, 2025</p>
-                <h4 className="text-base font-bold text-black mb-1">Client Review Meeting</h4>
-                <p className="text-sm text-gray-600">16 UTC - 17:00 UTC</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  </div>
-  );
-  
+  )
 }
-export default Home;
+
+export default LandingPage
