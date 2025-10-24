@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { fetchFeedback } from "../api/mock";
-
+import { useRouter } from 'next/navigation';
 export default function FeedbackQueuePage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('Pending');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,10 @@ export default function FeedbackQueuePage() {
   const [feedbackItems, setFeedbackItems] = useState<any[]>([]);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+    }
     let isMounted = true;
     setLoading(true);
     setError(null);
