@@ -1,21 +1,47 @@
 "use client";
 import React, { useEffect, useState } from 'react'
 import { fetchBoard } from "../api/mock";
+import { useRouter } from 'next/navigation';
+import { Plus, ChevronDown, Circle, CheckCircle2, Clock, AlertTriangle, MoreHorizontal } from 'lucide-react';
 
 const TaskBoard = () => {
+  const router = useRouter();
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
   const [draggedTask, setDraggedTask] = useState<any>(null);
+  const [dragOverSection, setDragOverSection] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
+    'In Progress': true,
+    'To Do': true,
+    'Done': true
+  });
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+    }
     let isMounted = true;
     setLoading(true);
     setError(null);
     fetchBoard()
-      .then((data) => { if (isMounted) setTasks(data as any[]); })
+      .then((data) => {
+        if (isMounted) {
+          // Transform data to include task IDs and additional properties
+          const transformedTasks = (data as any[]).map((task, index) => ({
+            ...task,
+            taskId: `ROB-${(index + 1).toString().padStart(2, '0')}`,
+            priority: task.priority || ['High', 'Medium', 'Low'][Math.floor(Math.random() * 3)],
+            assignee: task.assignee || 'Unassigned',
+            dueDate: task.dueDate || new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+            labels: task.labels || ['Feature', 'Bug', 'Enhancement'][Math.floor(Math.random() * 3)]
+          }));
+          setTasks(transformedTasks);
+        }
+      })
       .catch(() => { if (isMounted) setError('Failed to load tasks'); })
       .finally(() => { if (isMounted) setLoading(false); });
     return () => { isMounted = false; };
@@ -31,9 +57,35 @@ const TaskBoard = () => {
     setSelectedTask(null);
   };
 
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const updateTaskStatus = (taskId: string, newStatus: string) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId
+          ? { ...task, status: newStatus, completed: newStatus === 'Completed' }
+          : task
+      )
+    );
+  };
+
+  // Drag and Drop Handlers
   const handleDragStart = (e: React.DragEvent, task: any) => {
     setDraggedTask(task);
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', (e.currentTarget as HTMLElement).outerHTML);
+    (e.currentTarget as HTMLElement).style.opacity = '0.5';
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    (e.currentTarget as HTMLElement).style.opacity = '1';
+    setDraggedTask(null);
+    setDragOverSection(null);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -41,13 +93,36 @@ const TaskBoard = () => {
     e.dataTransfer.dropEffect = 'move';
   };
 
+  const handleDragEnter = (e: React.DragEvent, section: string) => {
+    e.preventDefault();
+    setDragOverSection(section);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    // Only clear if we're leaving the section entirely
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setDragOverSection(null);
+    }
+  };
+
   const handleDrop = (e: React.DragEvent, targetStatus: string) => {
     e.preventDefault();
+    setDragOverSection(null);
+
     if (draggedTask && draggedTask.status !== targetStatus) {
-      setTasks(prevTasks => 
-        prevTasks.map(task => 
-          task.id === draggedTask.id 
-            ? { ...task, status: targetStatus, completed: targetStatus === 'Completed' }
+      const statusMap: { [key: string]: string } = {
+        'To Do': 'To Do',
+        'In Progress': 'In Progress',
+        'Done': 'Completed'
+      };
+
+      const newStatus = statusMap[targetStatus] || targetStatus;
+
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === draggedTask.id
+            ? { ...task, status: newStatus, completed: newStatus === 'Completed' }
             : task
         )
       );
@@ -59,120 +134,112 @@ const TaskBoard = () => {
     return tasks.filter(task => task.status === status);
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'To Do':
-        return 'bg-gray-100 text-gray-800';
+        return <Circle className="w-4 h-4 text-gray-400" />;
       case 'In Progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'In Review':
-        return 'bg-yellow-100 text-yellow-800';
+        return <Clock className="w-4 h-4 text-yellow-400" />;
       case 'Completed':
-        return 'bg-green-100 text-green-800';
+      case 'Done':
+        return <CheckCircle2 className="w-4 h-4 text-green-400" />;
       default:
-        return 'bg-gray-100 text-gray-800';
+        return <Circle className="w-4 h-4 text-gray-400" />;
     }
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityIcon = (priority: string) => {
     switch (priority) {
       case 'High':
-        return 'bg-red-100 text-red-800';
+        return <AlertTriangle className="w-3 h-3 text-red-400" />;
       case 'Medium':
-        return 'bg-yellow-100 text-yellow-800';
+        return <AlertTriangle className="w-3 h-3 text-yellow-400" />;
       case 'Low':
-        return 'bg-green-100 text-green-800';
+        return <AlertTriangle className="w-3 h-3 text-green-400" />;
       default:
-        return 'bg-gray-100 text-gray-800';
+        return null;
     }
+  };
+
+  const getLabelColor = (label: string) => {
+    switch (label) {
+      case 'Feature':
+        return 'bg-blue-900 text-blue-300';
+      case 'Bug':
+        return 'bg-red-900 text-red-300';
+      case 'Enhancement':
+        return 'bg-purple-900 text-purple-300';
+      default:
+        return 'bg-gray-700 text-gray-300';
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
   return (
-    <div className="w-full min-h-full bg-gray-50 relative">
-      {/* Green left border */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-green-600"></div>
-      
-      {/* Main content with left padding to account for border */}
-      <div className="pl-6">
-        {/* Page-specific header with back button and tabs */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex justify-between items-center mb-4">
-            {/* Left side - Back button and breadcrumb */}
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <span className="text-gray-600 font-medium">Back</span>
-              </div>
-              <div>
-                <span className="text-gray-400">Department/</span>
-                <span className="text-gray-900 font-medium"> Development</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Tab Navigation */}
-          <div className="flex gap-1">
-            <button className="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium">
-              Board
-            </button>
-            <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              List
-            </button>
-            <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Files
-            </button>
-            <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Due Task
-            </button>
-          </div>
+    <div className="w-full min-h-screen bg-gray-900 text-white">
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-3 bg-gray-800 border-b border-gray-700">
+        <div className="flex items-center gap-4">
+          <button className="flex items-center gap-2 text-gray-300 hover:text-white text-sm">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filter
+          </button>
         </div>
+        <div className="flex items-center gap-4">
+          <button className="flex items-center gap-2 text-gray-300 hover:text-white text-sm">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
+            Display
+          </button>
+        </div>
+      </div>
 
-        {/* Kanban Board */}
-        <div className="p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
+      {/* Task List */}
+      <div className="px-6 py-4">
+        {loading && (
+          <div className="text-gray-400 text-center py-8">Loading tasks...</div>
+        )}
+        {error && !loading && (
+          <div className="text-red-400 text-center py-8">{error}</div>
+        )}
+
+        {!loading && !error && (
+          <div className="space-y-0">
+            {/* Todo Section */}
+            <div>
+              <div
+                className="flex items-center gap-3 py-3 cursor-pointer hover:text-white transition-colors"
+                onClick={() => toggleSection('To Do')}
+              >
+                <Circle className="w-4 h-4 text-gray-400" />
+                <span className="text-white font-medium">Todo</span>
+                <span className="text-gray-400 text-sm">{getTasksByStatus('To Do').length}</span>
+                <button className="ml-auto p-1 hover:bg-gray-700 rounded">
+                  <Plus className="w-4 h-4 text-gray-400" />
+                </button>
               </div>
-              <h1 className="text-xl font-semibold text-gray-900">Task Board {tasks.length}</h1>
-            </div>
-            <button className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">
-              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-            </button>
-          </div>
 
-          {/* Kanban Columns */}
-          {loading && (
-            <div className="p-6 text-gray-600 text-center">Loading tasks...</div>
-          )}
-          {error && !loading && (
-            <div className="p-6 text-red-600 text-center">{error}</div>
-          )}
-          {!loading && !error && (
-            <div className="flex gap-6 overflow-x-auto">
-              {/* To Do Column */}
-              <div className="flex-shrink-0 w-80">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <h2 className="text-lg font-semibold text-gray-900">To Do</h2>
-                  <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-sm font-medium">
-                    {getTasksByStatus('To Do').length}
-                  </span>
-                </div>
+              {expandedSections['To Do'] && (
                 <div
-                  className="min-h-96 bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-200"
+                  className={`space-y-0 min-h-[50px] transition-colors ${dragOverSection === 'To Do' ? 'bg-gray-800 border-2 border-dashed border-gray-600' : ''
+                    }`}
                   onDragOver={handleDragOver}
+                  onDragEnter={(e) => handleDragEnter(e, 'To Do')}
+                  onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, 'To Do')}
                 >
                   {getTasksByStatus('To Do').map((task) => (
@@ -180,46 +247,41 @@ const TaskBoard = () => {
                       key={task.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, task)}
+                      onDragEnd={handleDragEnd}
+                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer transition-colors border-l-2 border-transparent hover:border-gray-600"
                       onClick={() => handleTaskClick(task)}
-                      className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-3 cursor-pointer hover:shadow-md transition-shadow"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-medium text-gray-900">{task.title}</h3>
-                        <button className="w-4 h-4 text-gray-400 hover:text-gray-600">
-                          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
-                          JavaScript
-                        </span>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                          React
-                        </span>
-                      </div>
+                      <span className="text-gray-500 text-sm font-mono w-16">{task.taskId}</span>
+                      {getStatusIcon(task.status)}
+                      <span className="text-white font-medium flex-1 truncate">{task.title}</span>
+                      <span className="text-gray-400 text-sm">Oct 17</span>
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
+
+            {/* In Progress Section */}
+            <div>
+              <div
+                className="flex items-center gap-3 py-3 cursor-pointer hover:text-white transition-colors"
+                onClick={() => toggleSection('In Progress')}
+              >
+                <Clock className="w-4 h-4 text-yellow-400" />
+                <span className="text-white font-medium">In Progress</span>
+                <span className="text-gray-400 text-sm">{getTasksByStatus('In Progress').length}</span>
+                <button className="ml-auto p-1 hover:bg-gray-700 rounded">
+                  <Plus className="w-4 h-4 text-gray-400" />
+                </button>
               </div>
 
-              {/* In Progress Column */}
-              <div className="flex-shrink-0 w-80">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  </div>
-                  <h2 className="text-lg font-semibold text-gray-900">Doing</h2>
-                  <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-sm font-medium">
-                    {getTasksByStatus('In Progress').length}
-                  </span>
-                </div>
+              {expandedSections['In Progress'] && (
                 <div
-                  className="min-h-96 bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-200"
+                  className={`space-y-0 min-h-[50px] transition-colors ${dragOverSection === 'In Progress' ? 'bg-gray-800 border-2 border-dashed border-gray-600' : ''
+                    }`}
                   onDragOver={handleDragOver}
+                  onDragEnter={(e) => handleDragEnter(e, 'In Progress')}
+                  onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, 'In Progress')}
                 >
                   {getTasksByStatus('In Progress').map((task) => (
@@ -227,103 +289,81 @@ const TaskBoard = () => {
                       key={task.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, task)}
+                      onDragEnd={handleDragEnd}
+                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer transition-colors border-l-2 border-transparent hover:border-gray-600"
                       onClick={() => handleTaskClick(task)}
-                      className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-3 cursor-pointer hover:shadow-md transition-shadow"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-medium text-gray-900">{task.title}</h3>
-                        <button className="w-4 h-4 text-gray-400 hover:text-gray-600">
-                          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        <span className="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">
-                          HTML
-                        </span>
-                        <span className="px-2 py-1 bg-teal-100 text-teal-800 rounded-full text-xs font-medium">
-                          CSS
-                        </span>
-                      </div>
+                      <span className="text-gray-500 text-sm font-mono w-16">{task.taskId}</span>
+                      {getStatusIcon(task.status)}
+                      <span className="text-white font-medium flex-1 truncate">{task.title}</span>
+                      <span className="text-gray-400 text-sm">Oct 17</span>
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
+
+            {/* Done Section */}
+            <div>
+              <div
+                className="flex items-center gap-3 py-3 cursor-pointer hover:text-white transition-colors"
+                onClick={() => toggleSection('Done')}
+              >
+                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                <span className="text-white font-medium">Done</span>
+                <span className="text-gray-400 text-sm">{getTasksByStatus('Completed').length}</span>
+                <button className="ml-auto p-1 hover:bg-gray-700 rounded">
+                  <Plus className="w-4 h-4 text-gray-400" />
+                </button>
               </div>
 
-              {/* Done Column */}
-              <div className="flex-shrink-0 w-80">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <h2 className="text-lg font-semibold text-gray-900">Done</h2>
-                  <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-sm font-medium">
-                    {getTasksByStatus('Completed').length}
-                  </span>
-                </div>
+              {expandedSections['Done'] && (
                 <div
-                  className="min-h-96 bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-200"
+                  className={`space-y-0 min-h-[50px] transition-colors ${dragOverSection === 'Done' ? 'bg-gray-800 border-2 border-dashed border-gray-600' : ''
+                    }`}
                   onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, 'Completed')}
+                  onDragEnter={(e) => handleDragEnter(e, 'Done')}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, 'Done')}
                 >
                   {getTasksByStatus('Completed').map((task) => (
                     <div
                       key={task.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, task)}
+                      onDragEnd={handleDragEnd}
+                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer transition-colors border-l-2 border-transparent hover:border-gray-600 opacity-60"
                       onClick={() => handleTaskClick(task)}
-                      className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-3 cursor-pointer hover:shadow-md transition-shadow"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-medium text-gray-900">{task.title}</h3>
-                        <button className="w-4 h-4 text-gray-400 hover:text-gray-600">
-                          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                          React
-                        </span>
-                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
-                          JavaScript
-                        </span>
-                      </div>
+                      <span className="text-gray-500 text-sm font-mono w-16">{task.taskId}</span>
+                      {getStatusIcon(task.status)}
+                      <span className="text-white font-medium flex-1 truncate line-through">{task.title}</span>
+                      <span className="text-gray-400 text-sm">Oct 17</span>
                     </div>
                   ))}
                 </div>
-              </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Task Detail Modal */}
       {showModal && selectedTask && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gray-800 border border-gray-700 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               {/* Modal Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center">
-                    {selectedTask.completed && (
-                      <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
-                  <h2 className="text-xl font-semibold text-gray-900">{selectedTask.title}</h2>
+                  {getStatusIcon(selectedTask.status)}
+                  <h2 className="text-xl font-semibold text-white">{selectedTask.title}</h2>
                 </div>
                 <button
                   onClick={closeModal}
-                  className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
                 >
-                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -333,50 +373,47 @@ const TaskBoard = () => {
               <div className="space-y-6">
                 {/* Task ID and Status */}
                 <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-gray-600">Task ID:</span>
-                  <span className="text-sm text-gray-900">{selectedTask.id}</span>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedTask.status)}`}>
-                    {selectedTask.status}
-                  </span>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor(selectedTask.priority)}`}>
-                    {selectedTask.priority} Priority
+                  <span className="text-sm font-medium text-gray-400">Task ID:</span>
+                  <span className="text-sm text-white font-mono">{selectedTask.taskId}</span>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getLabelColor(selectedTask.labels)}`}>
+                    {selectedTask.labels}
                   </span>
                 </div>
 
                 {/* Description */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Description</h3>
-                  <p className="text-gray-900 leading-relaxed">{selectedTask.description}</p>
+                  <h3 className="text-sm font-medium text-gray-400 mb-2">Description</h3>
+                  <p className="text-white leading-relaxed">{selectedTask.description}</p>
                 </div>
 
                 {/* Assignee and Due Date */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-600 mb-2">Assignee</h3>
+                    <h3 className="text-sm font-medium text-gray-400 mb-2">Assignee</h3>
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
-                        <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
+                      <div className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-white">
+                          {selectedTask.assignee?.charAt(0)?.toUpperCase() || 'U'}
+                        </span>
                       </div>
-                      <span className="text-sm text-gray-900">{selectedTask.assignee}</span>
+                      <span className="text-sm text-white">{selectedTask.assignee}</span>
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-600 mb-2">Due Date</h3>
-                    <span className="text-sm text-gray-900">{selectedTask.dueDate}</span>
+                    <h3 className="text-sm font-medium text-gray-400 mb-2">Due Date</h3>
+                    <span className="text-sm text-white">{selectedTask.dueDate}</span>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-3 pt-4 border-t border-gray-200">
-                  <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                <div className="flex gap-3 pt-4 border-t border-gray-700">
+                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition-colors">
                     Mark Complete
                   </button>
-                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                  <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm transition-colors">
                     Edit Task
                   </button>
-                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                  <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm transition-colors">
                     Add Comment
                   </button>
                 </div>

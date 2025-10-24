@@ -1,10 +1,9 @@
-import React from "react";
+import { requirePerformanceAccess } from "@/lib/auth-utils";
+import PerformanceClient from "./PerformanceClient";
 
-const Performance = () => {
-  return (
-    <div className="flex flex-col flex-1">
-      Performance
-    </div>
-  )
+export default async function PerformancePage() {
+  // Server-side authentication and authorization check
+  const user = await requirePerformanceAccess();
+
+  return <PerformanceClient user={user} />;
 }
-export default Performance;
