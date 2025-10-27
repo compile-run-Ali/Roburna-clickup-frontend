@@ -56,12 +56,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="roburna-navbar bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md border-b border-white/10 px-6 py-4 shadow-lg">
+    <div className="roburna-navbar bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md border-b border-white/10 px-6 py-4">
       {/* Enhanced Top Header */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-1 drop-shadow-lg">{getPageTitle()}</h1>
+            <h1 className="text-2xl font-bold text-white mb-1">{getPageTitle()}</h1>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               <p className="text-white/70 text-sm font-medium">{getCurrentDate()}</p>
@@ -106,7 +106,7 @@ const Navbar = () => {
           </button>
 
           {/* Primary CTA - Add Task */}
-          <button className="bg-gray-600 border-2 border-green-400 text-gray-200 group flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 hover:bg-green-500 hover:text-white hover:scale-105">
+          <button className="bg-gray-600 border-2 border-green-400 text-gray-200 group flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 hover:bg-green-500 hover:text-white hover:scale-105">
             <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -116,7 +116,7 @@ const Navbar = () => {
           {/* User Profile */}
           {user && (
             <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-white/20">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center border-2 border-white/30 shadow-lg">
+              <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center border-2 border-white/30">
                 <span className="text-white font-bold text-sm">
                   {(user.name || user.email?.split('@')[0] || 'U').charAt(0).toUpperCase()}
                 </span>

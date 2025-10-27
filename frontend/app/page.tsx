@@ -13,13 +13,13 @@ const LandingPage = () => {
           <div className="flex justify-between items-center py-6">
             {/* Enhanced Logo */}
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/30 shadow-lg">
-                <svg className="w-7 h-7 text-white drop-shadow-lg" viewBox="0 0 24 24" fill="currentColor">
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/30">
+                <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
                 </svg>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white drop-shadow-lg tracking-wide">ROBURNA</h1>
+                <h1 className="text-3xl font-bold text-white tracking-wide">ROBURNA</h1>
                 <p className="text-sm text-white/80 font-medium">Project Management Platform</p>
               </div>
             </div>
@@ -30,7 +30,7 @@ const LandingPage = () => {
                 // Show user info and dashboard button for logged-in users
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center border-2 border-white/30 shadow-lg">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center border-2 border-white/30">
                       <span className="text-white font-bold text-sm">
                         {user?.name?.charAt(0).toUpperCase() || 'U'}
                       </span>
@@ -42,7 +42,7 @@ const LandingPage = () => {
                   </div>
                   <Link
                     href="/dashboard"
-                    className="roburna-btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                    className="roburna-btn-primary px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                   >
                     Go to Dashboard
                   </Link>
@@ -58,7 +58,7 @@ const LandingPage = () => {
                   </Link>
                   <Link
                     href="/sign-up"
-                    className="roburna-btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                    className="roburna-btn-primary px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                   >
                     Get Started
                   </Link>
@@ -89,7 +89,7 @@ const LandingPage = () => {
               </span>
             </div>
             
-            <h1 className="text-6xl md:text-7xl font-bold mb-8 text-white drop-shadow-2xl">
+            <h1 className="text-6xl md:text-7xl font-bold mb-8 text-white">
               {isAuthenticated ? (
                 <>
                   Ready to Continue
@@ -107,7 +107,7 @@ const LandingPage = () => {
               )}
             </h1>
             
-            <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed drop-shadow-lg">
+            <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed">
               {isAuthenticated ? (
                 `Access your dashboard, manage tasks, and collaborate with your team. 
                 Continue where you left off and keep your projects moving forward.`
@@ -123,7 +123,7 @@ const LandingPage = () => {
                 <>
                   <Link
                     href="/dashboard"
-                    className="group bg-white/95 backdrop-blur-md text-slate-800 hover:bg-white px-10 py-4 rounded-2xl text-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/30"
+                    className="group bg-white/95 backdrop-blur-md text-slate-800 hover:bg-white px-10 py-4 rounded-lg text-lg font-bold transition-all duration-300 hover:scale-105 border border-white/30"
                   >
                     <span className="flex items-center space-x-2">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +150,7 @@ const LandingPage = () => {
                 <>
                   <Link
                     href="/sign-up"
-                    className="group bg-white/95 backdrop-blur-md text-slate-800 hover:bg-white px-10 py-4 rounded-2xl text-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/30"
+                    className="group bg-white/95 backdrop-blur-md text-slate-800 hover:bg-white px-10 py-4 rounded-2xl text-lg font-bold transition-all duration-300 hover:scale-105 border border-white/30"
                   >
                     <span className="flex items-center space-x-2">
                       <span>Start Free Trial</span>
@@ -206,7 +206,7 @@ const LandingPage = () => {
                 Comprehensive Feature Set
               </span>
             </div>
-            <h2 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">
+            <h2 className="text-5xl font-bold text-white mb-6">
               Everything You Need to
               <span className="block roburna-gradient-text">Manage Projects</span>
             </h2>
@@ -317,7 +317,7 @@ const LandingPage = () => {
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl font-bold mb-6 text-white drop-shadow-lg">
+            <h2 className="text-5xl font-bold mb-6 text-white">
               Trusted by Teams
               <span className="block bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
                 Worldwide
@@ -370,7 +370,7 @@ const LandingPage = () => {
               </span>
             </div>
             
-            <h2 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">
+            <h2 className="text-5xl font-bold text-white mb-6">
               Transform Your
               <span className="block roburna-gradient-text">Project Management</span>
             </h2>
@@ -472,7 +472,7 @@ const LandingPage = () => {
             {/* Logo and Description */}
             <div className="md:col-span-2">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 roburna-gradient rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 roburna-gradient rounded-lg flex items-center justify-center">
                   <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
                   </svg>

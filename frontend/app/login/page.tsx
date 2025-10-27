@@ -156,7 +156,7 @@ const LoginPage = () => {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1E7145] focus:border-[#1E7145] sm:text-sm ${errors.email ? 'border-red-300' : 'border-gray-300'
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${errors.email ? 'border-red-300' : 'border-gray-300'
                     }`}
                   placeholder="Enter your email"
                 />
@@ -180,7 +180,7 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1E7145] focus:border-[#1E7145] sm:text-sm ${errors.password ? 'border-red-300' : 'border-gray-300'
+                  className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${errors.password ? 'border-red-300' : 'border-gray-300'
                     }`}
                   placeholder="Enter your password"
                 />
@@ -260,7 +260,7 @@ const LoginPage = () => {
             <div className="mt-6">
               <Link
                 href="/sign-up"
-                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E7145] transition-colors"
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors"
               >
                 Create new organization
               </Link>

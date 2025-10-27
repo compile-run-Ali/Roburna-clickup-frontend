@@ -104,7 +104,7 @@ export default function FeedbackQueuePage() {
           <input
             type="text"
             placeholder="Search feedback, clients, or projects..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -124,7 +124,7 @@ export default function FeedbackQueuePage() {
         {filteredFeedback.map((item) => (
           <div
             key={item.id}
-            className={`${getCardBgColor(item.status)} p-4 rounded-xl shadow-sm transition-all duration-200`}
+            className={`${getCardBgColor(item.status)} p-4 rounded-lg transition-all duration-200`}
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center">

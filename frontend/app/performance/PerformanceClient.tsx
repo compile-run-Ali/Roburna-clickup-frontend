@@ -33,7 +33,7 @@ export default function PerformanceClient({ user }: PerformanceClientProps) {
 
       <main className="max-w-7xl mx-auto px-8 py-8">
         {/* Access Level Info */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Access Level</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
@@ -53,19 +53,19 @@ export default function PerformanceClient({ user }: PerformanceClientProps) {
 
         {/* Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Team Performance</h3>
             <div className="text-3xl font-bold text-blue-600 mb-2">85%</div>
             <p className="text-gray-600 text-sm">Overall team efficiency</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Tasks Completed</h3>
             <div className="text-3xl font-bold text-green-600 mb-2">142</div>
             <p className="text-gray-600 text-sm">This month</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Active Projects</h3>
             <div className="text-3xl font-bold text-purple-600 mb-2">8</div>
             <p className="text-gray-600 text-sm">Currently in progress</p>
@@ -74,7 +74,7 @@ export default function PerformanceClient({ user }: PerformanceClientProps) {
 
         {/* Department-specific content */}
         {isCEO() ? (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">All Departments Overview</h2>
             <div className="space-y-4">
               <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
@@ -96,7 +96,7 @@ export default function PerformanceClient({ user }: PerformanceClientProps) {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
               {user.department} Department Performance
             </h2>
