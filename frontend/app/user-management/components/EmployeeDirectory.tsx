@@ -151,7 +151,7 @@ const EmployeeDirectory = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="roburna-error-message p-4 rounded-xl">
+        <div className="roburna-error-message p-4 rounded-lg">
           <p>{error}</p>
         </div>
       )}

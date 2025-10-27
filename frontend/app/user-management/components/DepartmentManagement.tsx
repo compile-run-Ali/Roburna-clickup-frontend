@@ -279,13 +279,13 @@ const DepartmentManagement = () => {
     <div className="space-y-6">
       {/* Success/Error Messages */}
       {success && (
-        <div className="roburna-success-message p-4 rounded-xl">
+        <div className="roburna-success-message p-4 rounded-lg">
           <p>{success}</p>
         </div>
       )}
 
       {error && (
-        <div className="roburna-error-message p-4 rounded-xl">
+        <div className="roburna-error-message p-4 rounded-lg">
           <p>{error}</p>
         </div>
       )}

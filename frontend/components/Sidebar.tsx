@@ -20,7 +20,7 @@ const Sidebar = () => {
           <div className="flex items-center px-4 py-4 transition-all duration-300 hover:roburna-bg-tertiary rounded-lg mx-2 mt-2">
             <div className="flex items-center space-x-3">
               {/* Roburna Logo */}
-              <div className="w-8 h-8 roburna-bg-tertiary rounded-lg flex items-center justify-center border border-gray-600 shadow-lg group-hover:scale-105 transition-transform duration-300">
+              <div className="w-8 h-8 roburna-bg-tertiary rounded-lg flex items-center justify-center border border-gray-600 group-hover:scale-105 transition-transform duration-300">
                 <svg className="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
                 </svg>
@@ -97,7 +97,7 @@ const Sidebar = () => {
                     </div>
                     <span className="text-sm font-medium">Feedback</span>
                   </div>
-                  <div className="w-5 h-5 bg-red-500/80 rounded-full flex items-center justify-center border border-white/30 shadow-sm">
+                  <div className="w-5 h-5 bg-red-500/80 rounded-full flex items-center justify-center border border-white/30">
                     <span className="text-white text-xs font-bold">8</span>
                   </div>
                 </Link>
@@ -196,7 +196,7 @@ const Sidebar = () => {
 
         {/* Departments Section */}
         <div className="px-4 pb-4 mt-auto">
-          <div className="roburna-card-dark rounded-xl p-3 border border-gray-600">
+          <div className="roburna-card-dark rounded-lg p-3 border border-gray-600">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-xs font-semibold roburna-text-secondary uppercase tracking-wider">Departments</h3>
               <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">

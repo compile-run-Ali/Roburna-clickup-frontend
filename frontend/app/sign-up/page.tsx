@@ -280,7 +280,7 @@ const SignUpPage = () => {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1E7145] focus:border-[#1E7145] sm:text-sm ${
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${
                     errors.email ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Enter your email"
@@ -305,7 +305,7 @@ const SignUpPage = () => {
                   required
                   value={formData.username}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1E7145] focus:border-[#1E7145] sm:text-sm ${
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${
                     errors.username ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Choose a username"
@@ -330,7 +330,7 @@ const SignUpPage = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1E7145] focus:border-[#1E7145] sm:text-sm ${
+                  className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${
                     errors.password ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Create a password"
@@ -371,7 +371,7 @@ const SignUpPage = () => {
                   required
                   value={formData.organizationName}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1E7145] focus:border-[#1E7145] sm:text-sm ${
+                  className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${
                     errors.organizationName
                       ? 'border-red-300'
                       : organizationStatus === 'available'
@@ -433,7 +433,7 @@ const SignUpPage = () => {
                 name="terms"
                 type="checkbox"
                 required
-                className="h-4 w-4 text-[#1E7145] focus:ring-[#1E7145] border-gray-300 rounded"
+                className="h-4 w-4 text-[#1E7145] border-gray-300 rounded"
               />
               <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
                 I agree to the{' '}
@@ -452,7 +452,7 @@ const SignUpPage = () => {
               <button
                 type="submit"
                 disabled={isLoading || organizationStatus === 'taken' || organizationStatus === 'checking'}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1E7145] hover:bg-[#388E3C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E7145] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-sm font-medium text-white bg-[#1E7145] hover:bg-[#388E3C] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? (
                   <div className="flex items-center">
@@ -483,7 +483,7 @@ const SignUpPage = () => {
             <div className="mt-6">
               <Link
                 href="/login"
-                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E7145] transition-colors"
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors"
               >
                 Sign in instead
               </Link>

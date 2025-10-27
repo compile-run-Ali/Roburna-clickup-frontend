@@ -68,13 +68,13 @@ const UserManagementClient = () => {
 
                 {/* Tab Navigation */}
                 <div className="mb-8">
-                    <div className="flex space-x-1 bg-black/20 backdrop-blur-md rounded-2xl p-2 border border-white/10">
+                    <div className="flex space-x-1 bg-black/20 backdrop-blur-md rounded-lg p-2 border border-white/10">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${activeTab === tab.id
-                                    ? 'roburna-gradient text-white shadow-lg'
+                                className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 ${activeTab === tab.id
+                                    ? 'roburna-gradient text-white'
                                     : 'text-white/70 hover:text-white hover:bg-white/10'
                                     }`}
                             >
