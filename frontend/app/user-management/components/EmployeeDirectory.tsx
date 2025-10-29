@@ -16,6 +16,7 @@ const EmployeeDirectory = () => {
   const [employees, setEmployees] = useState<Employee[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
   const [filters, setFilters] = useState({
     username: '',
     email: '',
@@ -23,8 +24,118 @@ const EmployeeDirectory = () => {
     role_name: ''
   })
   
+  // Role management states
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
+  const [newRole, setNewRole] = useState('')
+  const [isUpdating, setIsUpdating] = useState(false)
+  
+  // Delete employee states
+  const [employeeToDelete, setEmployeeToDelete] = useState<Employee | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  
   const { data: session } = useSession()
-  const { user, isCEO } = usePermissions()
+  const { user, isCEO, isManager, isAssistantManager } = usePermissions()
+
+  // Clear messages after 5 seconds
+  useEffect(() => {
+    if (success || error) {
+      const timer = setTimeout(() => {
+        setSuccess(null)
+        setError(null)
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [success, error])
+
+  const availableRoles = () => {
+    if (isCEO()) {
+      return ['manager', 'assistant_manager', 'developer', 'intern']
+    } else if (isManager()) {
+      return ['assistant_manager', 'developer', 'intern']
+    } else if (isAssistantManager()) {
+      return ['developer', 'intern']
+    }
+    return []
+  }
+
+  const canUpdateRole = (employeeRole: string) => {
+    const empRole = employeeRole?.toLowerCase()
+    
+    if (isCEO()) return true
+    if (isManager()) return ['assistant_manager', 'developer', 'intern'].includes(empRole)
+    if (isAssistantManager()) return ['developer', 'intern'].includes(empRole)
+    
+    return false
+  }
+
+  const updateEmployeeRole = async () => {
+    if (!selectedEmployee || !newRole) return
+
+    try {
+      setIsUpdating(true)
+      setError(null)
+      setSuccess(null)
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/update_subordinate_role`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          employee_id: selectedEmployee.user_id,
+          new_role_name: newRole
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || 'Failed to update role')
+      }
+
+      const data = await response.json()
+      setSuccess(data.message)
+      setSelectedEmployee(null)
+      setNewRole('')
+      await fetchEmployees() // Refresh the list
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update role')
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
+  const deleteEmployee = async () => {
+    if (!employeeToDelete) return
+
+    try {
+      setIsDeleting(true)
+      setError(null)
+      setSuccess(null)
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/delete_subordinate_employee/${employeeToDelete.user_id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken}`,
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || 'Failed to delete employee')
+      }
+
+      const data = await response.json()
+      setSuccess(data.message || `Employee ${employeeToDelete.username} has been deleted successfully`)
+      setEmployeeToDelete(null)
+      await fetchEmployees() // Refresh the list
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete employee')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
 
   const fetchEmployees = async () => {
     try {
@@ -149,7 +260,13 @@ const EmployeeDirectory = () => {
         </div>
       </div>
 
-      {/* Error Message */}
+      {/* Success/Error Messages */}
+      {success && (
+        <div className="roburna-success-message p-4 rounded-lg">
+          <p>{success}</p>
+        </div>
+      )}
+      
       {error && (
         <div className="roburna-error-message p-4 rounded-lg">
           <p>{error}</p>
@@ -200,13 +317,32 @@ const EmployeeDirectory = () => {
                 <p className="text-white/70 text-sm mb-2">{employee.email}</p>
                 <p className="text-white/60 text-xs">{employee.department_name}</p>
                 
-                <div className="mt-4 flex space-x-2">
-                  <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg transition-colors">
-                    View Profile
-                  </button>
-                  {(isCEO() || user?.role === 'manager' || user?.role === 'assistant_manager') && (
-                    <button className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-xs py-2 px-3 rounded-lg transition-colors">
-                      Manage
+                <div className="mt-4 space-y-2">
+                  <div className="flex space-x-2">
+                    <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg transition-all hover:scale-105">
+                      View Profile
+                    </button>
+                    {canUpdateRole(employee.role_name) && (
+                      <button 
+                        onClick={() => {
+                          setSelectedEmployee(employee)
+                          setNewRole(employee.role_name)
+                        }}
+                        className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-xs py-2 px-3 rounded-lg transition-colors"
+                      >
+                        Manage Role
+                      </button>
+                    )}
+                  </div>
+                  {isCEO() && (
+                    <button 
+                      onClick={() => setEmployeeToDelete(employee)}
+                      className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs py-2 px-3 rounded-lg transition-colors flex items-center justify-center space-x-1"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      <span>Delete Employee</span>
                     </button>
                   )}
                 </div>
@@ -215,6 +351,103 @@ const EmployeeDirectory = () => {
           </div>
         )}
       </div>
+
+      {/* Role Management Modal */}
+      {selectedEmployee && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="roburna-modal max-w-md w-full p-6">
+            <h3 className="text-xl font-bold text-white mb-4">Update Employee Role</h3>
+            
+            <div className="mb-4">
+              <p className="text-white/70 mb-2">Employee: <span className="text-white font-medium">{selectedEmployee.username}</span></p>
+              <p className="text-white/70 mb-2">Email: <span className="text-white font-medium">{selectedEmployee.email}</span></p>
+              <p className="text-white/70 mb-4">Current Role: <span className="text-white font-medium">{selectedEmployee.role_name?.replace('_', ' ')}</span></p>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-white/70 text-sm font-medium mb-2">New Role</label>
+              <select
+                value={newRole}
+                onChange={(e) => setNewRole(e.target.value)}
+                className="roburna-select w-full"
+              >
+                <option value="">Select new role</option>
+                {availableRoles().map(role => (
+                  <option key={role} value={role}>
+                    {role.replace('_', ' ').toUpperCase()}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={updateEmployeeRole}
+                disabled={isUpdating || !newRole || newRole === selectedEmployee.role_name}
+                className="flex-1 roburna-btn-primary disabled:opacity-50"
+              >
+                {isUpdating ? 'Updating...' : 'Update Role'}
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedEmployee(null)
+                  setNewRole('')
+                }}
+                className="flex-1 roburna-btn-secondary"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Employee Confirmation Modal */}
+      {employeeToDelete && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="roburna-modal max-w-md w-full p-6">
+            <h3 className="text-xl font-bold text-white mb-4">Delete Employee</h3>
+            
+            <div className="mb-6">
+              <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full">
+                <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              
+              <p className="text-white/70 text-center mb-4">
+                Are you sure you want to delete this employee? This action cannot be undone.
+              </p>
+              
+              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-4">
+                <p className="text-white font-medium mb-1">{employeeToDelete.username}</p>
+                <p className="text-white/70 text-sm mb-1">{employeeToDelete.email}</p>
+                <p className="text-white/60 text-xs">{employeeToDelete.role_name?.replace('_', ' ')} • {employeeToDelete.department_name}</p>
+              </div>
+              
+              <p className="text-red-300 text-sm text-center">
+                This will permanently remove the employee from your organization.
+              </p>
+            </div>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setEmployeeToDelete(null)}
+                className="flex-1 roburna-btn-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteEmployee}
+                disabled={isDeleting}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Employee'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
