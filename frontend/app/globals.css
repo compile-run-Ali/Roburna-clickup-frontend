@@ -73,12 +73,14 @@ body {
   border: 1px solid var(--roburna-border-accent);
   border-radius: 6px;
   color: var(--roburna-text-primary);
+  transition: all 0.3s ease;
 }
 
 .roburna-card:hover {
-  background: var(--roburna-bg-card-hover);
-  border-color: var(--roburna-primary);
+  transform: scale(1.02);
 }
+
+
 
 .roburna-card-dark {
   background: var(--roburna-bg-secondary);
@@ -100,8 +102,10 @@ body {
 }
 
 .roburna-btn-primary:hover {
-  transform: translateY(-2px);
+  transform: scale(1.05);
 }
+
+
 
 .roburna-btn-secondary {
   background: transparent;
@@ -114,10 +118,10 @@ body {
 }
 
 .roburna-btn-secondary:hover {
-  background: var(--roburna-primary);
-  color: white;
-  transform: translateY(-1px);
+  transform: scale(1.05);
 }
+
+
 
 /* Roburna Input Styles - Dark Theme */
 .roburna-input {
@@ -223,10 +227,10 @@ body {
 }
 
 .roburna-sidebar-nav-item:hover {
-  background: var(--roburna-bg-tertiary);
-  color: var(--roburna-text-primary);
-  transform: translateX(4px);
+  transform: scale(1.02);
 }
+
+
 
 .roburna-sidebar-nav-item.active {
   background: var(--roburna-bg-tertiary);
@@ -240,10 +244,7 @@ body {
   border-radius: 4px;
 }
 
-.roburna-sidebar-dept-item:hover {
-  background: var(--roburna-bg-tertiary);
-  color: var(--roburna-text-primary);
-}
+
 
 
 
@@ -258,9 +259,10 @@ body {
 }
 
 .roburna-stat-card:hover {
-  transform: translateY(-4px);
-  background: var(--roburna-bg-card-hover);
+  transform: scale(1.03);
 }
+
+
 
 /* Roburna Task Board Enhancements - Dark Theme */
 .roburna-task-card {
@@ -272,9 +274,42 @@ body {
 }
 
 .roburna-task-card:hover {
-  transform: translateY(-2px);
-  background: var(--roburna-bg-card-hover);
+  transform: scale(1.02);
 }
+
+/* Task Item Hover Effects */
+.roburna-task-item {
+  transition: all 0.3s ease;
+}
+.roburna-task-item:hover {
+  transform: scale(1.02);
+}
+
+/* Light Theme Card Hover Effects */
+.roburna-light-card {
+  transition: all 0.3s ease;
+}
+.roburna-light-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Text Truncation Utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
 
 /* Roburna Form Enhancements - Dark Theme */
 .roburna-form-container {
@@ -365,11 +400,13 @@ body {
 
 .roburna-table-row {
   border-bottom: 1px solid var(--roburna-border-primary);
+  transition: all 0.3s ease;
+}
+.roburna-table-row:hover {
+  transform: scale(1.01);
 }
 
-.roburna-table-row:hover {
-  background: var(--roburna-bg-card-hover);
-}
+
 
 /* Dark Theme Select Styles */
 .roburna-select {
@@ -430,6 +467,10 @@ ed Roburna Navbar Styles */
   overflow: hidden;
 }
 
+.roburna-navbar-btn:hover {
+  transform: scale(1.05);
+}
+
 .roburna-navbar-btn::before {
   content: '';
   position: absolute;
@@ -441,15 +482,9 @@ ed Roburna Navbar Styles */
   transition: left 0.5s ease;
 }
 
-.roburna-navbar-btn:hover {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: rgba(34, 197, 94, 0.4);
-  transform: translateY(-2px);
-}
 
-.roburna-navbar-btn:hover::before {
-  left: 100%;
-}
+
+
 
 .roburna-navbar-btn-secondary {
   background: rgba(255, 255, 255, 0.08);
@@ -465,6 +500,10 @@ ed Roburna Navbar Styles */
   overflow: hidden;
 }
 
+.roburna-navbar-btn-secondary:hover {
+  transform: scale(1.05);
+}
+
 .roburna-navbar-btn-secondary::before {
   content: '';
   position: absolute;
@@ -476,15 +515,9 @@ ed Roburna Navbar Styles */
   transition: left 0.5s ease;
 }
 
-.roburna-navbar-btn-secondary:hover {
-  background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.3);
-  transform: translateY(-2px);
-}
 
-.roburna-navbar-btn-secondary:hover::before {
-  left: 100%;
-}
+
+
 
 /* Enhanced Tab Styles */
 .roburna-tab-active {
@@ -537,16 +570,9 @@ ed Roburna Navbar Styles */
   transition: left 0.5s ease;
 }
 
-.roburna-tab-inactive:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: white;
-  transform: translateY(-1px);
-}
 
-.roburna-tab-inactive:hover::before {
-  left: 100%;
-}
+
+
 
 /* Navbar Animation Classes */
 .roburna-navbar-fade-in {
@@ -601,9 +627,7 @@ ed Roburna Navbar Styles */
   animation: roburnaPulse 2s infinite;
 }/* 
 Enhanced Logout Button Styles */
-.roburna-navbar-btn:hover svg {
-  transform: scale(1.1);
-}
+
 
 .roburna-logout-btn {
   background: rgba(239, 68, 68, 0.1);
@@ -627,17 +651,28 @@ Enhanced Logout Button Styles */
   transition: left 0.5s ease;
 }
 
-.roburna-logout-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.4);
-  transform: translateY(-2px);
+
+
+
+
+/* Line Clamp Utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
 }
 
-.roburna-logout-btn:hover::before {
-  left: 100%;
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.roburna-logout-btn:hover svg {
-  transform: scale(1.1) rotate(5deg);
-  color: #FCA5A5;
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }

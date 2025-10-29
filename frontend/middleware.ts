@@ -36,9 +36,10 @@ export default withAuth(
       }
     }
 
-    // Client management - CEO only
+    // Client management - CEO and Manager
     if (pathname.startsWith("/client-management")) {
-      if (token?.role?.toLowerCase() !== "ceo") {
+      const allowedRoles = ["ceo", "manager"];
+      if (!token?.role || !allowedRoles.includes(token.role.toLowerCase())) {
         return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
     }

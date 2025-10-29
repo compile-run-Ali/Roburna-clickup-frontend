@@ -228,7 +228,7 @@ const TaskBoard = () => {
                 <Circle className="w-4 h-4 text-gray-400" />
                 <span className="text-white font-medium">Todo</span>
                 <span className="text-gray-400 text-sm">{getTasksByStatus('To Do').length}</span>
-                <button className="ml-auto p-1 hover:bg-gray-700 rounded">
+                <button className="ml-auto p-1 hover:bg-gray-700 rounded transition-all hover:scale-110">
                   <Plus className="w-4 h-4 text-gray-400" />
                 </button>
               </div>
@@ -248,7 +248,7 @@ const TaskBoard = () => {
                       draggable
                       onDragStart={(e) => handleDragStart(e, task)}
                       onDragEnd={handleDragEnd}
-                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer transition-colors border-l-2 border-transparent hover:border-gray-600"
+                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer roburna-task-item border-l-2 border-transparent hover:border-gray-600"
                       onClick={() => handleTaskClick(task)}
                     >
                       <span className="text-gray-500 text-sm font-mono w-16">{task.taskId}</span>
@@ -270,7 +270,7 @@ const TaskBoard = () => {
                 <Clock className="w-4 h-4 text-yellow-400" />
                 <span className="text-white font-medium">In Progress</span>
                 <span className="text-gray-400 text-sm">{getTasksByStatus('In Progress').length}</span>
-                <button className="ml-auto p-1 hover:bg-gray-700 rounded">
+                <button className="ml-auto p-1 hover:bg-gray-700 rounded transition-all hover:scale-110">
                   <Plus className="w-4 h-4 text-gray-400" />
                 </button>
               </div>
@@ -290,7 +290,7 @@ const TaskBoard = () => {
                       draggable
                       onDragStart={(e) => handleDragStart(e, task)}
                       onDragEnd={handleDragEnd}
-                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer transition-colors border-l-2 border-transparent hover:border-gray-600"
+                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer roburna-task-item border-l-2 border-transparent hover:border-gray-600"
                       onClick={() => handleTaskClick(task)}
                     >
                       <span className="text-gray-500 text-sm font-mono w-16">{task.taskId}</span>
@@ -312,7 +312,7 @@ const TaskBoard = () => {
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                 <span className="text-white font-medium">Done</span>
                 <span className="text-gray-400 text-sm">{getTasksByStatus('Completed').length}</span>
-                <button className="ml-auto p-1 hover:bg-gray-700 rounded">
+                <button className="ml-auto p-1 hover:bg-gray-700 rounded transition-all hover:scale-110">
                   <Plus className="w-4 h-4 text-gray-400" />
                 </button>
               </div>
@@ -332,7 +332,7 @@ const TaskBoard = () => {
                       draggable
                       onDragStart={(e) => handleDragStart(e, task)}
                       onDragEnd={handleDragEnd}
-                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer transition-colors border-l-2 border-transparent hover:border-gray-600 opacity-60"
+                      className="group flex items-center gap-3 py-2 px-3 hover:bg-gray-800 cursor-pointer roburna-task-item border-l-2 border-transparent hover:border-gray-600 opacity-60"
                       onClick={() => handleTaskClick(task)}
                     >
                       <span className="text-gray-500 text-sm font-mono w-16">{task.taskId}</span>
@@ -407,13 +407,13 @@ const TaskBoard = () => {
 
                 {/* Actions */}
                 <div className="flex gap-3 pt-4 border-t border-gray-700">
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition-colors">
+                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition-all hover:scale-105">
                     Mark Complete
                   </button>
-                  <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm transition-colors">
+                  <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm transition-all hover:scale-105">
                     Edit Task
                   </button>
-                  <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm transition-colors">
+                  <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm transition-all hover:scale-105">
                     Add Comment
                   </button>
                 </div>

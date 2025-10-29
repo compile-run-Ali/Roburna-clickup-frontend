@@ -355,10 +355,10 @@ export default function AddMember() {
               <p className="roburna-text-secondary mt-1">Invite new members to your organization</p>
             </div>
             <div className="flex items-center gap-4">
-              <button className="p-2 roburna-text-secondary hover:roburna-text-primary hover:roburna-bg-secondary rounded-lg">
+              <button className="p-2 roburna-text-secondary rounded-lg">
                 <Users size={20} />
               </button>
-              <button className="p-2 roburna-text-secondary hover:roburna-text-primary hover:roburna-bg-secondary rounded-lg">
+              <button className="p-2 roburna-text-secondary rounded-lg">
                 <Shield size={20} />
               </button>
             </div>
@@ -478,7 +478,7 @@ export default function AddMember() {
                 {!loadingDepartments && availableDepartments.length === 0 && (
                   <button
                     onClick={fetchDepartments}
-                    className="text-xs text-blue-400 hover:text-blue-300 underline"
+                    className="text-xs text-blue-400 underline"
                   >
                     Retry
                   </button>

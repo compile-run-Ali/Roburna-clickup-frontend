@@ -17,10 +17,10 @@ const Sidebar = () => {
 
         {/* Header Section */}
         <Link href="/" className="group">
-          <div className="flex items-center px-4 py-4 transition-all duration-300 hover:roburna-bg-tertiary rounded-lg mx-2 mt-2">
+          <div className="flex items-center px-4 py-4 transition-all duration-300 rounded-lg mx-2 mt-2">
             <div className="flex items-center space-x-3">
               {/* Roburna Logo */}
-              <div className="w-8 h-8 roburna-bg-tertiary rounded-lg flex items-center justify-center border border-gray-600 group-hover:scale-105 transition-transform duration-300">
+              <div className="w-8 h-8 roburna-bg-tertiary rounded-lg flex items-center justify-center border border-gray-600 transition-transform duration-300">
                 <svg className="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
                 </svg>
@@ -32,7 +32,7 @@ const Sidebar = () => {
             </div>
           </div>
         </Link>
-        
+
 
         {/* Main Navigation */}
         <div className="flex-1 px-4">
@@ -42,7 +42,7 @@ const Sidebar = () => {
               <li>
                 <Link href="/dashboard" className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/dashboard'
                   ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                  : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                  : 'roburna-text-secondary'
                   }`}>
                   <div className="w-4 h-4 flex-shrink-0">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@ const Sidebar = () => {
               <li>
                 <Link href="/task-board" className={`flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/task-board'
                   ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                  : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                  : 'roburna-text-secondary'
                   }`}>
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 flex-shrink-0">
@@ -73,7 +73,7 @@ const Sidebar = () => {
               <li>
                 <Link href="/project-management" className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/project-management'
                   ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                  : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                  : 'roburna-text-secondary'
                   }`}>
                   <div className="w-4 h-4 flex-shrink-0">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,10 +84,10 @@ const Sidebar = () => {
                 </Link>
               </li>
 
-              <li>
+              {/* <li>
                 <Link href="/feedback" className={`flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/feedback'
                   ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                  : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                  : 'roburna-text-secondary'
                   }`}>
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 flex-shrink-0">
@@ -101,12 +101,12 @@ const Sidebar = () => {
                     <span className="text-white text-xs font-bold">8</span>
                   </div>
                 </Link>
-              </li>
+              </li> */}
 
               <li>
                 <Link href="/archive" className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/archive'
                   ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                  : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                  : 'roburna-text-secondary'
                   }`}>
                   <div className="w-4 h-4 flex-shrink-0">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +128,7 @@ const Sidebar = () => {
                 <li>
                   <Link href="/user-management" className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/user-management'
                     ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                    : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                    : 'roburna-text-secondary'
                     }`}>
                     <div className="w-4 h-4 flex-shrink-0">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@ const Sidebar = () => {
                   <li>
                     <Link href="/performance" className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/performance'
                       ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                      : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                      : 'roburna-text-secondary'
                       }`}>
                       <div className="w-4 h-4 flex-shrink-0">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,12 +156,12 @@ const Sidebar = () => {
                   </li>
                 )}
 
-                {/* Client Management - CEO only */}
-                {user?.role?.toLowerCase() === "ceo" && (
+                {/* Client Management - CEO and Manager */}
+                {(user?.role?.toLowerCase() === "ceo" || user?.role?.toLowerCase() === "manager") && (
                   <li>
                     <Link href="/client-management" className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/client-management'
                       ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                      : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                      : 'roburna-text-secondary'
                       }`}>
                       <div className="w-4 h-4 flex-shrink-0">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +178,7 @@ const Sidebar = () => {
                   <li>
                     <Link href="/add-member" className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${pathname === '/add-member'
                       ? 'roburna-bg-tertiary roburna-text-primary border-l-4 border-green-400'
-                      : 'roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary'
+                      : 'roburna-text-secondary'
                       }`}>
                       <div className="w-4 h-4 flex-shrink-0">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,7 +206,7 @@ const Sidebar = () => {
 
             <ul className="space-y-1">
               <li>
-                <a href="#" className="flex items-center justify-between px-2 py-1.5 transition-all duration-300 roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary rounded-lg">
+                <a href="#" className="flex items-center justify-between px-2 py-1.5 transition-all duration-300 roburna-text-secondary rounded-lg">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 flex-shrink-0">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +219,7 @@ const Sidebar = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="flex items-center justify-between px-2 py-1.5 transition-all duration-300 roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary rounded-lg">
+                <a href="#" className="flex items-center justify-between px-2 py-1.5 transition-all duration-300 roburna-text-secondary rounded-lg">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 flex-shrink-0">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,7 +232,7 @@ const Sidebar = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="flex items-center justify-between px-2 py-1.5 transition-all duration-300 roburna-text-secondary hover:roburna-bg-tertiary hover:roburna-text-primary rounded-lg">
+                <a href="#" className="flex items-center justify-between px-2 py-1.5 transition-all duration-300 roburna-text-secondary rounded-lg">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 flex-shrink-0">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

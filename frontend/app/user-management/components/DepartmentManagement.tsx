@@ -38,6 +38,10 @@ const DepartmentManagement = () => {
   const [isCreating, setIsCreating] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
 
+  // Department deletion states
+  const [departmentToDelete, setDepartmentToDelete] = useState<Department | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
   // Clear messages after 5 seconds
   useEffect(() => {
     if (success || error) {
@@ -221,6 +225,38 @@ const DepartmentManagement = () => {
     }
   }, [editingDepartment, newDepartmentName, session?.accessToken, fetchEmployees])
 
+  const deleteDepartment = React.useCallback(async () => {
+    if (!departmentToDelete || !session?.accessToken) return
+
+    try {
+      setIsDeleting(true)
+      setError(null)
+      setSuccess(null)
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/organization/delete_organization_department/${departmentToDelete.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session.accessToken}`,
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || 'Failed to delete department')
+      }
+
+      const data = await response.json()
+      setSuccess(data.message || `Department "${departmentToDelete.name}" has been deleted successfully!`)
+      setDepartmentToDelete(null)
+      await fetchEmployees() // Refresh the list
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete department')
+    } finally {
+      setIsDeleting(false)
+    }
+  }, [departmentToDelete, session?.accessToken, fetchEmployees])
+
   // Store isCEO result to avoid function calls in useEffect
   const isUserCEO = isCEO()
 
@@ -314,18 +350,29 @@ const DepartmentManagement = () => {
                   {dept.employeeCount} employees
                 </span>
               </div>
-              <p className="text-white/60 text-sm mb-3">Department ID: {dept.id}</p>
 
-              <button
-                onClick={() => {
-                  setEditingDepartment(dept)
-                  setNewDepartmentName(dept.name)
-                  setShowEditDepartment(true)
-                }}
-                className="w-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-xs py-2 px-3 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-              >
-                Edit Name
-              </button>
+
+              <div className="space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => {
+                    setEditingDepartment(dept)
+                    setNewDepartmentName(dept.name)
+                    setShowEditDepartment(true)
+                  }}
+                  className="w-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-xs py-2 px-3 rounded-lg transition-colors"
+                >
+                  Edit Name
+                </button>
+                <button
+                  onClick={() => setDepartmentToDelete(dept)}
+                  className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs py-2 px-3 rounded-lg transition-colors flex items-center justify-center space-x-1"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <span>Delete</span>
+                </button>
+              </div>
             </div>
           ))}
 
@@ -508,7 +555,6 @@ const DepartmentManagement = () => {
             <h3 className="text-xl font-bold text-white mb-4">Edit Department Name</h3>
 
             <div className="mb-4">
-              <p className="text-white/70 mb-2">Department ID: <span className="text-white font-medium">{editingDepartment.id}</span></p>
               <p className="text-white/70 mb-4">Current Name: <span className="text-white font-medium">{editingDepartment.name}</span></p>
             </div>
 
@@ -550,6 +596,58 @@ const DepartmentManagement = () => {
                 className="flex-1 roburna-btn-secondary"
               >
                 Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Department Confirmation Modal */}
+      {departmentToDelete && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="roburna-modal max-w-md w-full p-6">
+            <h3 className="text-xl font-bold text-white mb-4">Delete Department</h3>
+            
+            <div className="mb-6">
+              <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full">
+                <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              
+              <p className="text-white/70 text-center mb-4">
+                Are you sure you want to delete this department? This action cannot be undone.
+              </p>
+              
+              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-4">
+                <p className="text-white font-medium mb-1">{departmentToDelete.name}</p>
+                <p className="text-white/60 text-sm">{departmentToDelete.employeeCount} employees currently assigned</p>
+              </div>
+              
+              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mb-4">
+                <p className="text-yellow-300 text-sm">
+                  <strong>Warning:</strong> All employees in this department will need to be reassigned to other departments before deletion.
+                </p>
+              </div>
+              
+              <p className="text-red-300 text-sm text-center">
+                This will permanently remove the department from your organization.
+              </p>
+            </div>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setDepartmentToDelete(null)}
+                className="flex-1 roburna-btn-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteDepartment}
+                disabled={isDeleting}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Department'}
               </button>
             </div>
           </div>

@@ -26,7 +26,7 @@ This document outlines the role-based access control system implemented using Ne
 - **Access:**
   - Performance page ✅
   - Add member page ✅
-  - Client management page ❌
+  - Client management page ✅ (View-only)
   - Own department only ✅
 
 ### Assistant Manager
@@ -62,7 +62,7 @@ This document outlines the role-based access control system implemented using Ne
 ### Protected Pages
 - `app/performance/page.tsx` - CEO and Manager only
 - `app/add-member/page.tsx` - Management roles only
-- `app/client-management/page.tsx` - CEO only
+- `app/client-management/page.tsx` - CEO and Manager (Manager view-only)
 - `app/unauthorized/page.tsx` - Access denied page
 
 ### Components
@@ -101,7 +101,7 @@ function MyComponent() {
 Routes are automatically protected based on role in `middleware.ts`:
 - `/performance/*` - CEO and Manager only
 - `/add-member/*` - Management roles only
-- `/client-management/*` - CEO only
+- `/client-management/*` - CEO and Manager (Manager view-only)
 - `/admin/*` - CEO only
 
 ## Environment Variables

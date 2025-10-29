@@ -2,16 +2,84 @@
 
 import { usePermissions } from "@/hooks/usePermissions";
 import { useRouter } from "next/navigation";
-import { Loader, Calendar, CheckCircle, AlertTriangle, Users, FolderOpen, Clock, User, Flag } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { Loader, Calendar, CheckCircle, AlertTriangle, Users, FolderOpen } from "lucide-react";
+
+interface Project {
+  project_id: string;
+  title: string;
+  description: string;
+  status: string;
+  urgency: string;
+  budget?: number;
+  total_revenue?: number;
+  client_id: string;
+  client_name: string;
+  client_company: string;
+  start_date?: string;
+  due_date?: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
 export default function DashboardPage() {
+  const { data: session } = useSession();
   const {
     user,
-    isLoading,
-    canAccessPerformance,
-    canManageOwnDepartment
+    isLoading
   } = usePermissions();
   const router = useRouter();
+
+  // Project states
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(false);
+  const [projectError, setProjectError] = useState<string | null>(null);
+  const [expandedClients, setExpandedClients] = useState<Set<string>>(new Set());
+
+  // Fetch projects from API
+  const fetchProjects = async () => {
+    try {
+      setLoadingProjects(true);
+      setProjectError(null);
+
+      if (!session?.accessToken) {
+        return;
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/projects/get_projects`, {
+        headers: {
+          'Authorization': `Bearer ${session.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch projects: ${response.status}`);
+      }
+
+      const projectsData = await response.json();
+      
+      // Filter out completed and cancelled projects for active projects section
+      const activeProjects = projectsData.filter((project: Project) => 
+        project.status !== 'completed' && project.status !== 'cancelled'
+      );
+      
+      setProjects(activeProjects);
+    } catch (err) {
+      console.error('Failed to fetch projects:', err);
+      setProjectError(err instanceof Error ? err.message : 'Failed to fetch projects');
+    } finally {
+      setLoadingProjects(false);
+    }
+  };
+
+  // Load projects when component mounts
+  useEffect(() => {
+    if (session?.accessToken && user) {
+      fetchProjects();
+    }
+  }, [session?.accessToken, user]);
 
   if (isLoading) {
     return (
@@ -26,12 +94,12 @@ export default function DashboardPage() {
     return null;
   }
 
-  // Mock data for the dashboard
+  // Calculate stats from real project data
   const stats = {
-    activeProjects: 18,
-    tasksToday: 0,
-    overdueTasks: 4,
-    teamMembers: 12
+    activeProjects: projects.length,
+    tasksToday: 0, // TODO: Implement when task API is available
+    overdueTasks: 4, // TODO: Implement when task API is available
+    teamMembers: 12 // TODO: Implement when user API is available
   };
 
   const escalations = [
@@ -64,48 +132,7 @@ export default function DashboardPage() {
     }
   ];
 
-  const projects = [
-    {
-      id: 1,
-      name: "Improve Security Measures",
-      description: "Implement two-factor authentication and data encryption.",
-      progress: 68,
-      status: "Active",
-      dueDate: "19th Oct 2025",
-      members: 4,
-      tags: ["Planning", "High"]
-    },
-    {
-      id: 2,
-      name: "Blockpals Logo Creation",
-      description: "Implement two-factor authentication and data encryption.",
-      progress: 68,
-      status: "Active",
-      dueDate: "19th Oct 2025",
-      members: 4,
-      tags: ["Planning", "High"]
-    },
-    {
-      id: 3,
-      name: "Vybes Platform to Launch",
-      description: "Implement two-factor authentication and data encryption.",
-      progress: 68,
-      status: "Active",
-      dueDate: "19th Oct 2025",
-      members: 4,
-      tags: ["Planning", "High"]
-    },
-    {
-      id: 4,
-      name: "Improve Security Measures",
-      description: "Implement two-factor authentication and data encryption.",
-      progress: 68,
-      status: "Active",
-      dueDate: "19th Oct 2025",
-      members: 4,
-      tags: ["Planning", "High"]
-    }
-  ];
+
 
   const dueTasks = [
     {
@@ -148,14 +175,75 @@ export default function DashboardPage() {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Urgent':
-        return 'bg-red-500';
-      case 'Resolved':
-        return 'bg-green-500';
+    switch (status.toLowerCase()) {
+      case 'active':
+      case 'in_progress':
+        return 'bg-green-100 text-green-700';
+      case 'planning':
+        return 'bg-blue-100 text-blue-700';
+      case 'on_hold':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'completed':
+        return 'bg-gray-100 text-gray-700';
       default:
-        return 'bg-gray-500';
+        return 'bg-gray-100 text-gray-700';
     }
+  };
+
+  const getUrgencyColor = (urgency: string) => {
+    switch (urgency.toLowerCase()) {
+      case 'high':
+        return 'bg-red-100 text-red-700';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'low':
+        return 'bg-green-100 text-green-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'No due date';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      day: 'numeric', 
+      month: 'short', 
+      year: 'numeric' 
+    });
+  };
+
+  const calculateProgress = (startDate?: string, dueDate?: string) => {
+    if (!startDate || !dueDate) return 0;
+    
+    const start = new Date(startDate).getTime();
+    const due = new Date(dueDate).getTime();
+    const now = new Date().getTime();
+    
+    if (now < start) return 0;
+    if (now > due) return 100;
+    
+    const totalDuration = due - start;
+    const elapsed = now - start;
+    return Math.round((elapsed / totalDuration) * 100);
+  };
+
+  const truncateClientName = (clientName: string, companyName: string, maxLength: number = 25) => {
+    const fullName = `${clientName} (${companyName})`;
+    if (fullName.length <= maxLength) return fullName;
+    return fullName.substring(0, maxLength) + '...';
+  };
+
+  const toggleClientExpansion = (projectId: string) => {
+    setExpandedClients(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(projectId)) {
+        newSet.delete(projectId);
+      } else {
+        newSet.add(projectId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -248,56 +336,137 @@ export default function DashboardPage() {
       {/* Active Projects */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold roburna-text-primary">Active Projects</h2>
-          <span className="roburna-gradient text-white px-3 py-1 rounded text-sm font-medium">3</span>
+          <div>
+            <h2 className="text-lg font-semibold roburna-text-primary">Active Projects</h2>
+            <p className="text-xs roburna-text-muted mt-1">Click on any project card to view all projects</p>
+          </div>
+          <span className="roburna-gradient text-white px-3 py-1 rounded text-sm font-medium">
+            {projects.length}
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {projects.map((project, index) => (
-            <div key={project.id} className="roburna-card roburna-slide-up p-6" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="flex items-start justify-between mb-3">
-                <h3 className="font-medium roburna-text-primary">{project.name}</h3>
-                <span className="bg-green-100 text-green-700 px-2 py-1 text-xs font-medium rounded">
-                  {project.status}
-                </span>
-              </div>
-              <p className="text-sm roburna-text-secondary mb-4">{project.description}</p>
+        {loadingProjects ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader className="animate-spin" size={24} />
+            <span className="ml-2 roburna-text-secondary">Loading projects...</span>
+          </div>
+        ) : projectError ? (
+          <div className="roburna-card p-6 text-center">
+            <AlertTriangle className="mx-auto mb-2 text-red-400" size={24} />
+            <p className="roburna-text-secondary">Failed to load projects</p>
+            <p className="text-sm text-red-400 mt-1">{projectError}</p>
+            <button 
+              onClick={fetchProjects}
+              className="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        ) : projects.length === 0 ? (
+          <div className="roburna-card p-6 text-center">
+            <FolderOpen className="mx-auto mb-2 roburna-text-muted" size={24} />
+            <p className="roburna-text-secondary">No active projects found</p>
+            <p className="text-sm roburna-text-muted mt-1">Create a new project to get started</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {projects.slice(0, 4).map((project, index) => {
+              const progress = calculateProgress(project.start_date, project.due_date);
+              return (
+                <div 
+                  key={project.project_id} 
+                  className="roburna-card roburna-slide-up p-6 flex flex-col h-full min-h-[400px] cursor-pointer hover:scale-105 transition-all duration-200 group" 
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => router.push('/project-management')}
+                  title="Click to view all projects"
+                >
+                  {/* Header with title and status */}
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="font-medium roburna-text-primary line-clamp-1 text-lg group-hover:text-green-400 transition-colors">{project.title}</h3>
+                    <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(project.status)} ml-2 flex-shrink-0`}>
+                      {project.status.replace('_', ' ')}
+                    </span>
+                  </div>
+                  
+                  {/* Description - fixed height */}
+                  <div className="mb-4 flex-grow-0">
+                    <p className="text-sm roburna-text-secondary line-clamp-2 min-h-[2.5rem]">
+                      {project.description || 'No description available'}
+                    </p>
+                  </div>
 
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="roburna-text-secondary">Progress</span>
-                  <span className="font-medium">{project.progress}%</span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div
-                    className="roburna-gradient h-2 rounded-full"
-                    style={{ width: `${project.progress}%` }}
-                  ></div>
-                </div>
-              </div>
+                  {/* Urgency badge */}
+                  <div className="mb-4">
+                    <span className={`inline-flex items-center px-3 py-1 text-xs font-medium rounded-full ${getUrgencyColor(project.urgency)}`}>
+                      <AlertTriangle size={12} className="mr-1" />
+                      {project.urgency}
+                    </span>
+                  </div>
 
-              <div className="flex items-center gap-2 mb-3">
-                {project.tags.map((tag, index) => (
-                  <span key={index} className={`px-2 py-1 text-xs font-medium rounded ${tag === 'Planning' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'
-                    }`}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
+                  {/* Progress section */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between text-sm mb-2">
+                      <span className="roburna-text-secondary">Progress</span>
+                      <span className="font-medium">{progress}%</span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div
+                        className="roburna-gradient h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
 
-              <div className="flex items-center justify-between text-sm roburna-text-secondary">
-                <div className="flex items-center gap-1">
-                  <Calendar size={14} />
-                  <span>Due Date: {project.dueDate}</span>
+                  {/* Project details - fixed height section */}
+                  <div className="space-y-2 mb-6 flex-grow">
+                    <div className="flex items-center gap-2 text-sm roburna-text-secondary">
+                      <Calendar size={14} className="flex-shrink-0" />
+                      <span className="text-xs">Due: {formatDate(project.due_date)}</span>
+                    </div>
+                    
+                    <div className="flex items-start gap-2 text-sm roburna-text-secondary">
+                      <FolderOpen size={14} className="flex-shrink-0 mt-0.5" />
+                      <div className="min-h-[2.5rem] flex flex-col justify-center flex-1">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent card click when expanding client name
+                            toggleClientExpansion(project.project_id);
+                          }}
+                          className="text-xs text-left hover:text-blue-400 transition-colors cursor-pointer"
+                          title="Click to expand/collapse client name"
+                        >
+                          Client: {expandedClients.has(project.project_id) 
+                            ? `${project.client_name} (${project.client_company})`
+                            : truncateClientName(project.client_name, project.client_company)
+                          }
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm roburna-text-secondary">
+                      <Users size={14} className="flex-shrink-0" />
+                      <span className="text-xs">Created: {formatDate(project.created_at)}</span>
+                    </div>
+                  </div>
+
+                  {/* Manage Team button - always at bottom */}
+                  <div className="mt-auto">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent card click when clicking manage team
+                        router.push('/project-management');
+                      }}
+                      className="w-full px-4 py-3 border-2 border-green-500 text-green-400 rounded-lg hover:bg-green-500 hover:text-white transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+                    >
+                      <Users size={16} />
+                      Manage Team
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Users size={14} />
-                  <span>{project.members} members</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Due Tasks */}
