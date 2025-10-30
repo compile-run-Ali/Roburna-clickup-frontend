@@ -382,7 +382,7 @@ export default function ClientManagementClient({ user }: ClientManagementClientP
             <select
               value={healthFilter}
               onChange={(e) => setHealthFilter(e.target.value)}
-              className="appearance-none roburna-select px-4 py-2.5 pr-8"
+              className="roburna-select"
             >
               <option value="">All Health</option>
               <option value="excellent">Excellent</option>
@@ -391,7 +391,6 @@ export default function ClientManagementClient({ user }: ClientManagementClientP
               <option value="poor">Poor</option>
               <option value="critical">Critical</option>
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
           </div>
 
           {/* Add Client Button - Only for CEO */}

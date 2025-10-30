@@ -411,13 +411,44 @@ body {
 /* Dark Theme Select Styles */
 .roburna-select {
   background: var(--roburna-bg-input);
-  border: 2px solid var(--roburna-border-primary);
+  border: 1px solid var(--roburna-border-primary);
   color: var(--roburna-text-primary);
-  border-radius: 4px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  padding-right: 32px;
 }
 
 .roburna-select:focus {
-  border-color: var(--roburna-primary);
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.roburna-select:hover {
+  border-color: var(--roburna-border-secondary);
+}
+
+.roburna-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.roburna-select option {
+  background: var(--roburna-bg-input);
+  color: var(--roburna-text-primary);
+  padding: 8px 12px;
+}
+
+/* Custom dropdown arrow for better consistency */
+.roburna-select.appearance-none {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
 }
 
 /* Dark Theme Success/Error Messages */

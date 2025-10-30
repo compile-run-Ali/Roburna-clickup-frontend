@@ -6,6 +6,8 @@ import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { usePathname } from "next/navigation";
 import { AuthProvider } from "./AuthContext";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,6 +53,21 @@ export default function RootLayout({
               </div>
             </div>
           )}
+          
+          {/* Toast Container */}
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            toastClassName="bg-gray-800 text-white"
+          />
         </AuthProvider>
       </body>
     </html>

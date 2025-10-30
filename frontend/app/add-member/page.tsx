@@ -395,8 +395,8 @@ export default function AddMember() {
               <label className="block text-sm font-semibold roburna-text-primary mb-2">
                 Email Address <span className="text-red-400">*</span>
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 roburna-text-muted pointer-events-none" size={18} />
+              <div className="relative flex flex-col">
+                {/* <Mail className="absolute left-3 top-3 roburna-text-muted pointer-events-none" size={18} /> */}
                 <input
                   type="email"
                   name="email"
@@ -420,7 +420,7 @@ export default function AddMember() {
                   name="role"
                   value={formData.role}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 roburna-select appearance-none"
+                  className="w-full roburna-select"
                 >
                   {availableRoles.map((role) => (
                     <option key={role} value={role}>
@@ -428,7 +428,6 @@ export default function AddMember() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-3 roburna-text-muted pointer-events-none" size={18} />
               </div>
               <p className="text-xs roburna-text-muted mt-1">Select member's role</p>
             </div>
@@ -443,7 +442,7 @@ export default function AddMember() {
                   name="department"
                   value={formData.department}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 roburna-select appearance-none"
+                  className="w-full roburna-select"
                   disabled={loadingDepartments || (!canManageAllDepartments() && availableDepartments.length <= 1)}
                 >
                   {loadingDepartments ? (
@@ -458,10 +457,8 @@ export default function AddMember() {
                     ))
                   )}
                 </select>
-                {loadingDepartments ? (
+                {loadingDepartments && (
                   <Loader className="absolute right-3 top-3 roburna-text-muted animate-spin" size={18} />
-                ) : (
-                  <ChevronDown className="absolute right-3 top-3 roburna-text-muted pointer-events-none" size={18} />
                 )}
               </div>
               <div className="flex items-center justify-between mt-1">

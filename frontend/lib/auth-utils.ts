@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions, ExtendedUser } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
+import { Session } from "next-auth";
 
 // Backend permission structure for invites
 const INVITE_PERMISSIONS: Record<string, string[]> = {
@@ -117,3 +118,39 @@ export const PERMISSIONS = {
   CAN_INVITE_DEVELOPER: "can_invite_developer",
   CAN_INVITE_INTERN: "can_invite_intern",
 } as const;
+
+/**
+ * Extracts the session token from NextAuth session object
+ * Tries multiple possible token locations for backward compatibility
+ * 
+ * @param session - NextAuth session object
+ * @returns Session token string or undefined if not found
+ */
+export const getSessionToken = (session: Session | null | undefined): string | undefined => {
+  if (!session) return undefined;
+
+  // Try different token properties from NextAuth session
+  const sessionAny = session as any;
+  
+  return sessionAny?.accessToken || 
+         sessionAny?.access_token || 
+         sessionAny?.token ||
+         session?.user?.email; // fallback to email as identifier
+};
+
+/**
+ * Debug helper to log session token availability
+ * Only logs in development mode
+ * 
+ * @param session - NextAuth session object
+ * @param context - Context string for debugging (e.g., "useProjects")
+ */
+export const debugSessionToken = (
+  session: Session | null | undefined, 
+  context: string = 'Auth'
+): void => {
+  if (process.env.NODE_ENV === 'development') {
+    const token = getSessionToken(session);
+    console.log(`[${context}] Session token available:`, !!token);
+  }
+};

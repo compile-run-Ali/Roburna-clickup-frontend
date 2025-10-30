@@ -1,13 +1,16 @@
 'use client'
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { usePermissions } from '@/hooks/usePermissions';
+import CreateTaskModal from './CreateTaskModal';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const pathname = usePathname();
   const { user, canManageOwnDepartment } = usePermissions();
+  const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
 
   // Get current date
   const getCurrentDate = () => {
@@ -53,6 +56,23 @@ const Navbar = () => {
       callbackUrl: '/login',
       redirect: true
     });
+  };
+
+  // Handle task creation
+  const handleTaskCreated = (task: any) => {
+    console.log('Task created:', task);
+    
+    // Dispatch a custom event to notify the task board to refresh
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('taskCreated', { detail: task }));
+    }
+  };
+
+  // Check if user can create tasks (CEO, Manager, Assistant Manager)
+  const canCreateTasks = () => {
+    if (!user?.role) return false;
+    const role = user.role.toLowerCase();
+    return ['ceo', 'manager', 'assistant_manager'].includes(role);
   };
 
   return (
@@ -105,13 +125,18 @@ const Navbar = () => {
             <span className="text-white font-medium text-sm group-hover:text-green-300 transition-colors">Share</span>
           </button>
 
-          {/* Primary CTA - Add Task */}
-          <button className="bg-gray-600 border-2 border-green-400 text-gray-200 group flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 hover:bg-green-500 hover:text-white hover:scale-105">
-            <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            <span className="text-sm">Add Task</span>
-          </button>
+          {/* Primary CTA - Add Task - Only for CEO, Manager, Assistant Manager */}
+          {canCreateTasks() && (
+            <button 
+              onClick={() => setShowCreateTaskModal(true)}
+              className="bg-gray-600 border-2 border-green-400 text-gray-200 group flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 hover:bg-green-500 hover:text-white hover:scale-105"
+            >
+              <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              <span className="text-sm">Add Task</span>
+            </button>
+          )}
 
           {/* User Profile */}
           {user && (
@@ -168,6 +193,13 @@ const Navbar = () => {
           </div>
         </button>
       </div>
+
+      {/* Create Task Modal */}
+      <CreateTaskModal
+        isOpen={showCreateTaskModal}
+        onClose={() => setShowCreateTaskModal(false)}
+        onTaskCreated={handleTaskCreated}
+      />
     </div>
   );
 };

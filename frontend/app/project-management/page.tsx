@@ -1279,71 +1279,7 @@ const ProjectManagement = () => {
                 </div>
 
                 {/* Team Members Section - Full Width */}
-                {(isCEO() || isManager()) && (
-                  <div className="mt-8">
-                    <h3 className="text-lg font-semibold roburna-text-primary mb-4 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                      </svg>
-                      Team Members (Optional)
-                    </h3>
-                    <p className="text-sm roburna-text-muted mb-4">
-                      Select Assistant Managers to add to this project team. You can also add team members later.
-                    </p>
-                    
-                    {loadingUsers ? (
-                      <div className="roburna-card-dark rounded-lg p-8 flex items-center justify-center">
-                        <Loader className="animate-spin w-6 h-6 mr-3" />
-                        <span className="text-sm">Loading team members...</span>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-60 overflow-y-auto roburna-card-dark p-4 rounded-lg">
-                        {availableUsers.map((user) => (
-                          <label key={user.user_id} className="flex items-center space-x-3 cursor-pointer p-3 hover:bg-gray-700 rounded-lg transition-colors">
-                            <input
-                              type="checkbox"
-                              checked={formData.collaborator_ids?.includes(user.user_id) || false}
-                              onChange={(e) => {
-                                const currentCollaborators = formData.collaborator_ids || [];
-                                if (e.target.checked) {
-                                  setFormData({ 
-                                    ...formData, 
-                                    collaborator_ids: [...currentCollaborators, user.user_id] 
-                                  });
-                                } else {
-                                  setFormData({ 
-                                    ...formData, 
-                                    collaborator_ids: currentCollaborators.filter(id => id !== user.user_id) 
-                                  });
-                                }
-                              }}
-                              className="rounded border-gray-600 bg-gray-700 text-green-500 focus:ring-green-500"
-                            />
-                            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                              <span className="text-white font-medium text-xs">
-                                {user.username.charAt(0).toUpperCase()}
-                              </span>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm roburna-text-primary font-medium truncate">{user.username}</div>
-                              <div className="text-xs roburna-text-muted truncate">{user.department_name}</div>
-                            </div>
-                          </label>
-                        ))}
-                        {availableUsers.length === 0 && (
-                          <div className="col-span-full text-center py-8">
-                            <svg className="w-12 h-12 roburna-text-muted mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                            </svg>
-                            <p className="text-sm roburna-text-muted">
-                              No Assistant Managers available to add.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )}
+              
 
 
 

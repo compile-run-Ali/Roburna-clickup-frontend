@@ -1,0 +1,387 @@
+/* Dark Theme Task Board CSS */
+
+/* CSS Custom Properties for Button Hover Effects */
+:root {
+  --hover-duration: 0.2s;
+  --hover-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --primary-hover-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  --secondary-hover-bg: rgba(75, 85, 99, 0.8);
+  --icon-hover-bg: rgba(75, 85, 99, 0.3);
+  --destructive-hover-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Smooth transitions for all interactive elements */
+.task-board * {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+/* Custom scrollbar for task columns - Dark theme */
+.task-column-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.task-column-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.task-column-scroll::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.6);
+  border-radius: 3px;
+}
+
+.task-column-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(75, 85, 99, 0.9);
+}
+
+/* Task card hover animations */
+.task-card {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Drag overlay styling - Dark theme */
+.task-drag-overlay {
+  transform: rotate(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Modal backdrop animation */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading skeleton animations - Dark theme */
+.skeleton {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive design utilities */
+@media (max-width: 768px) {
+  .task-board-mobile {
+    padding: 1rem;
+  }
+  
+  .task-column {
+    min-width: 280px;
+  }
+  
+  .modal-content {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+}
+
+/* Focus states for accessibility - Dark theme */
+.focus-ring:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: rgb(96, 165, 250);
+  ring-offset: 2px;
+}
+
+/* Enhanced Button Hover Effects - Dark Theme */
+
+/* Primary Button Hover Effects */
+.btn-hover-primary {
+  transition: all var(--hover-duration) var(--hover-timing);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.btn-hover-primary:hover:not(:disabled) {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--primary-hover-shadow);
+  background: linear-gradient(135deg, #60a5fa, #3b82f6) !important;
+}
+
+/* Secondary Button Hover Effects */
+.btn-hover-secondary {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.btn-hover-secondary:hover:not(:disabled) {
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Icon Button Hover Effects */
+.btn-hover-icon {
+  transition: all var(--hover-duration) var(--hover-timing);
+  border-radius: 0.5rem;
+}
+
+.btn-hover-icon:hover:not(:disabled) {
+  background-color: var(--icon-hover-bg) !important;
+  transform: scale(1.05);
+}
+
+/* Destructive Button Hover Effects */
+.btn-hover-destructive {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.btn-hover-destructive:hover:not(:disabled) {
+  background-color: #dc2626 !important;
+  color: #fef2f2 !important;
+  transform: translateY(-1px);
+  box-shadow: var(--destructive-hover-shadow);
+}
+
+/* Link Button Hover Effects */
+.btn-hover-link {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.btn-hover-link:hover:not(:disabled) {
+  color: #93c5fd !important;
+  text-decoration: underline;
+}
+
+/* Dropdown Item Hover Effects */
+.dropdown-item-hover {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.dropdown-item-hover:hover {
+  background-color: #374151 !important;
+  transform: translateX(2px);
+}
+
+/* User Selection Item Hover Effects */
+.user-item-hover {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.user-item-hover:hover {
+  background-color: #374151 !important;
+  transform: scale(1.02);
+}
+
+/* Badge and Tag Hover Effects */
+.badge-hover {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.badge-hover:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+/* Linear Task Board Styles */
+.linear-task-item {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.linear-task-item:hover {
+  background-color: rgba(55, 65, 81, 0.5);
+  border-color: rgba(75, 85, 99, 0.5);
+}
+
+.linear-task-item.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Linear Sidebar Styles */
+.linear-sidebar {
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+}
+
+.linear-sidebar-nav-item {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.linear-sidebar-nav-item:hover {
+  background-color: rgba(75, 85, 99, 0.3);
+  transform: translateX(2px);
+}
+
+.linear-sidebar-nav-item.active {
+  background-color: rgba(75, 85, 99, 0.6);
+  border-left: 3px solid #60a5fa;
+}
+
+/* Linear Search Input */
+.linear-search-input {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.linear-search-input:focus {
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  border-color: #60a5fa;
+}
+
+/* Linear Task Status Icons */
+.linear-status-icon {
+  transition: all var(--hover-duration) var(--hover-timing);
+}
+
+.linear-task-item:hover .linear-status-icon {
+  transform: scale(1.1);
+}
+
+/* Linear Drag Handle */
+.linear-drag-handle {
+  opacity: 0;
+  transition: opacity var(--hover-duration) var(--hover-timing);
+}
+
+.linear-task-item:hover .linear-drag-handle {
+  opacity: 1;
+}
+
+/* Drag and Drop Enhancements */
+.linear-drop-zone-active {
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px dashed rgba(59, 130, 246, 0.5);
+  transform: scale(1.02);
+}
+
+.linear-drop-zone-hover {
+  border: 2px dashed rgba(75, 85, 99, 0.3);
+}
+
+.linear-task-dragging {
+  opacity: 0.5;
+  transform: rotate(2deg) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+/* Drop zone feedback */
+.linear-drop-feedback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Linear Priority Badges */
+.linear-priority-high {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.linear-priority-medium {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.linear-priority-low {
+  background: rgba(34, 197, 94, 0.1);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .btn-hover-primary:hover:not(:disabled),
+  .btn-hover-secondary:hover:not(:disabled),
+  .btn-hover-icon:hover:not(:disabled),
+  .btn-hover-destructive:hover:not(:disabled),
+  .dropdown-item-hover:hover,
+  .user-item-hover:hover,
+  .badge-hover:hover,
+  .linear-task-item:hover,
+  .linear-sidebar-nav-item:hover,
+  .linear-status-icon,
+  .linear-drag-handle {
+    transform: none;
+    transition: background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+  }
+}
+
+/* Column drop zones - Dark theme */
+.drop-zone-active {
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px dashed rgba(59, 130, 246, 0.5);
+}
+
+/* Status indicators - Dark theme */
+.status-todo {
+  border-left: 4px solid #9ca3af;
+}
+
+.status-in-progress {
+  border-left: 4px solid #60a5fa;
+}
+
+.status-done {
+  border-left: 4px solid #34d399;
+}
+
+/* Priority indicators - Dark theme */
+.priority-high {
+  border-top: 3px solid #f87171;
+}
+
+.priority-medium {
+  border-top: 3px solid #fbbf24;
+}
+
+.priority-low {
+  border-top: 3px solid #34d399;
+}

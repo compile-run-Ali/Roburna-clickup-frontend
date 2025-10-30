@@ -31,7 +31,7 @@ const LoginViaEmailPage = () => {
     password: '',
     confirmPassword: ''
   })
-  const [errors, setErrors] = useState<{[key: string]: string}>({})
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [isLoading, setIsLoading] = useState(false)
   const [isValidatingToken, setIsValidatingToken] = useState(true)
 
@@ -48,7 +48,7 @@ const LoginViaEmailPage = () => {
       })
 
       console.log('Verification response status:', response.status)
-      
+
       const responseData = await response.json()
       console.log('Verification response data:', responseData)
 
@@ -66,13 +66,13 @@ const LoginViaEmailPage = () => {
         }
       } else {
         console.error('Token verification failed:', response.status, responseData)
-        
+
         // Show detailed error information
         let errorMessage = "Invalid or expired invitation link"
-        
+
         if (response.status === 422) {
           if (responseData.detail && Array.isArray(responseData.detail)) {
-            const validationErrors = responseData.detail.map((err: any) => 
+            const validationErrors = responseData.detail.map((err: any) =>
               `${err.loc?.join('.')}: ${err.msg}`
             ).join(', ')
             errorMessage = `Validation error: ${validationErrors}`
@@ -84,7 +84,7 @@ const LoginViaEmailPage = () => {
         } else if (responseData.detail) {
           errorMessage = responseData.detail
         }
-        
+
         toast.error(errorMessage)
         setTimeout(() => router.push('/login'), 2000)
       }
@@ -119,11 +119,11 @@ const LoginViaEmailPage = () => {
     if (token) {
       console.log('Token from URL:', token)
       console.log('Token length:', token.length)
-      
+
       // First check if token has valid JWT structure
       const parts = token.split('.')
       console.log('Token parts count:', parts.length)
-      
+
       if (parts.length !== 3) {
         console.error('Invalid JWT structure - should have 3 parts separated by dots')
         toast.error("Invalid invitation link format")
@@ -131,7 +131,7 @@ const LoginViaEmailPage = () => {
         setIsValidatingToken(false)
         return
       }
-      
+
       verifyInviteToken(token)
     } else {
       toast.error("No invitation token provided")
@@ -146,7 +146,7 @@ const LoginViaEmailPage = () => {
       ...prev,
       [name]: value
     }))
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -157,7 +157,7 @@ const LoginViaEmailPage = () => {
   }
 
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {}
+    const newErrors: { [key: string]: string } = {}
 
     // Username validation
     if (!formData.username.trim()) {
@@ -200,12 +200,12 @@ const LoginViaEmailPage = () => {
 
     try {
       console.log('Registering user with token:', token)
-      
+
       const requestBody = {
         username: formData.username,
         password: formData.password,
       }
-      
+
       console.log('Registration request body:', requestBody)
 
       const response = await fetch(`http://127.0.0.1:8000/auth/register_via_token/${encodeURIComponent(token)}`, {
@@ -217,14 +217,14 @@ const LoginViaEmailPage = () => {
       })
 
       console.log('Registration response status:', response.status)
-      
+
       const responseData = await response.json()
       console.log('Registration response data:', responseData)
 
       if (response.ok) {
         console.log('Registration successful')
         toast.success("Account created successfully! Redirecting to login...")
-        
+
         // Clear form
         setFormData({
           username: '',
@@ -238,12 +238,12 @@ const LoginViaEmailPage = () => {
         }, 2000)
       } else {
         console.error('Registration failed:', response.status, responseData)
-        
+
         // Handle specific error cases
         if (response.status === 422) {
           const validationErrors = responseData.detail
           if (Array.isArray(validationErrors)) {
-            const errorMessages = validationErrors.map((err: any) => 
+            const errorMessages = validationErrors.map((err: any) =>
               `${err.loc?.join('.')}: ${err.msg}`
             ).join(', ')
             toast.error(`Validation error: ${errorMessages}`)
@@ -279,7 +279,7 @@ const LoginViaEmailPage = () => {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Invalid Invitation</h2>
           <p className="text-gray-600 mb-6">This invitation link is invalid or has expired.</p>
-          <Link 
+          <Link
             href="/login"
             className="bg-[#1E7145] text-white px-6 py-2 rounded-lg hover:bg-[#388E3C] transition-colors"
           >
@@ -292,12 +292,12 @@ const LoginViaEmailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <ToastContainer 
-        position="top-right" 
-        autoClose={3000} 
-        hideProgressBar={false} 
-        newestOnTop={false} 
-        closeOnClick 
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
         pauseOnHover
       />
 
@@ -307,7 +307,7 @@ const LoginViaEmailPage = () => {
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-[#1E7145] rounded flex items-center justify-center">
               <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
               </svg>
             </div>
             <div>
@@ -316,14 +316,14 @@ const LoginViaEmailPage = () => {
             </div>
           </div>
         </div>
-        
+
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Complete Your Registration
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           You've been invited to join the organization
         </p>
-        
+
         {/* Invitation Info */}
         <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="text-center">
@@ -337,7 +337,7 @@ const LoginViaEmailPage = () => {
         </div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-8 text-black sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Username Field */}
@@ -354,9 +354,8 @@ const LoginViaEmailPage = () => {
                   required
                   value={formData.username}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${
-                    errors.username ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${errors.username ? 'border-red-300' : 'border-gray-300'
+                    }`}
                   placeholder="Choose a username"
                 />
                 {errors.username && (
@@ -379,9 +378,8 @@ const LoginViaEmailPage = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${errors.password ? 'border-red-300' : 'border-gray-300'
+                    }`}
                   placeholder="Create a password"
                 />
                 {errors.password && (
@@ -404,9 +402,8 @@ const LoginViaEmailPage = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${
-                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:border-[#1E7145] sm:text-sm ${errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                    }`}
                   placeholder="Confirm your password"
                 />
                 {errors.confirmPassword && (
